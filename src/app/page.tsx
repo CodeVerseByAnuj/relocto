@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <div className="flex flex-1 flex-col">
       <Header />
-      <HeroSection />
+      <HeroSection imageSrc="/images/poster.png" />
       <ServicesSection />
       <WhyChooseUsSection />
       <MobilityStatsSection />

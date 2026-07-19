@@ -1,4 +1,4 @@
-import { Compass } from "lucide-react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { SITE_CONFIG } from "@/constants/site";
 
@@ -8,35 +8,22 @@ interface LogoProps {
 }
 
 export function Logo({ className, variant = "dark" }: LogoProps) {
-  const textColor = variant === "light" ? "text-white" : "text-brand-navy";
-  const subTextColor =
-    variant === "light" ? "text-white/70" : "text-brand-navy/70";
-
   return (
-    <div className={cn("flex items-center gap-2", className)}>
-      <Compass
-        className={cn(
-          "size-8 shrink-0",
-          variant === "light" ? "text-white" : "text-brand-navy"
-        )}
-        aria-hidden="true"
+    <div
+      className={cn(
+        "flex items-center",
+        variant === "light" && "rounded-md bg-white px-2 py-1",
+        className
+      )}
+    >
+      <Image
+        src="/images/logo.png"
+        alt={SITE_CONFIG.fullName}
+        width={941}
+        height={265}
+        className="h-12 w-auto sm:h-16"
+        priority
       />
-      <div className="flex flex-col leading-tight">
-        <span className={cn("text-lg font-bold tracking-wide", textColor)}>
-          RELOCATO
-        </span>
-        <span
-          className={cn(
-            "text-[0.6rem] font-semibold tracking-[0.15em]",
-            subTextColor
-          )}
-        >
-          PACKERS AND MOVERS
-        </span>
-        <span className={cn("font-serif text-[0.65rem] italic", subTextColor)}>
-          {SITE_CONFIG.tagline}
-        </span>
-      </div>
     </div>
   );
 }
