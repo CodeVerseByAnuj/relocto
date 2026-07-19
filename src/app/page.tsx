@@ -1,11 +1,29 @@
 import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/hero/HeroSection";
+import { ServicesSection } from "@/components/sections/services/ServicesSection";
+import { WhyChooseUsSection } from "@/components/sections/features/WhyChooseUsSection";
+import { MobilityStatsSection } from "@/components/sections/features/MobilityStatsSection";
+import { RelocationMethodSection } from "@/components/sections/process/RelocationMethodSection";
+import { PartnersSection } from "@/components/sections/partners/PartnersSection";
+import { GlobalCoverageSection } from "@/components/sections/coverage/GlobalCoverageSection";
+import { TestimonialsSection } from "@/components/sections/testimonials/TestimonialsSection";
+import { CTASection } from "@/components/sections/cta/CTASection";
 
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col">
       <Header />
       <HeroSection />
+      <ServicesSection />
+      <WhyChooseUsSection />
+      <MobilityStatsSection />
+      <RelocationMethodSection />
+      <PartnersSection />
+      <GlobalCoverageSection />
+      <TestimonialsSection />
+      <CTASection />
+      <Footer />
     </div>
   );
 }
