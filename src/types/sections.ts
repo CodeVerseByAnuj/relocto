@@ -6,6 +6,12 @@ export interface ServiceItem {
   description: string;
 }
 
+export interface ServiceShowcaseItem {
+  image: string;
+  title: string;
+  description: string;
+}
+
 export interface FeatureItem {
   icon: LucideIcon;
   title: string;
