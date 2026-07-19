@@ -1,41 +1,50 @@
 import type { ProcessStep } from "@/types/sections";
 
 export const PROCESS_SECTION = {
-  eyebrow: "How It Works",
-  title: "The Relocation Method",
-  description:
-    "A clear, five-step process that keeps you informed from the first survey to final settling-in.",
+  title: "The Relocato Method",
+  subtitle: "Three simple steps to a stress-free move.",
 } as const;
 
 export const PROCESS_STEPS: ProcessStep[] = [
   {
     step: "01",
-    title: "Consultation & Survey",
+    title: "Mobility Planning",
     description:
-      "We understand your requirements and conduct a detailed survey — in person or virtual.",
+      "Comprehensive audit of assets and spatial planning of the destination site.",
+    image: "/images/service6.png",
   },
   {
     step: "02",
-    title: "Planning & Documentation",
+    title: "Pre-Move Survey",
     description:
-      "A structured move plan and all customs & compliance documentation is prepared.",
+      "Allocating premium logistics tech and specialized relocation specialists.",
+    image: "/images/service4.png",
   },
   {
     step: "03",
-    title: "Packing & Loading",
-    description:
-      "Trained crews pack and load using export-grade materials for maximum protection.",
+    title: "Packing & Handling Standards",
+    description: "High-grade protective architecture for high-value assets.",
+    image: "/images/service3.png",
   },
   {
     step: "04",
-    title: "Transit & Customs Clearance",
+    title: "Transportation & Tracking",
     description:
-      "Real-time shipment tracking with dedicated support through transit and clearance.",
+      "Real-time tracking and climate-controlled secure transport networks.",
+    image: "/images/service5.png",
   },
   {
     step: "05",
-    title: "Delivery & Settling-In",
+    title: "Delivery & Settling Support",
     description:
-      "Unpacking, placement & settling-in support at your new home or office.",
+      "White-glove unpacking and exact placement as per architecture plan.",
+    image: "/images/service2.png",
   },
 ];
+
+export const PROCESS_CTA = {
+  title: "Ready for a Precision Move?",
+  description:
+    "Experience the difference of architectural relocation. Our team of experts is ready to map out your next move with millimetre precision.",
+  cta: { label: "Start Planning", href: "/contact#planning" },
+} as const;
