@@ -1,55 +1,57 @@
 import {
-  BadgeCheck,
-  Clock,
-  Globe2,
-  HeartHandshake,
+  ClipboardList,
+  Gauge,
+  MapPinned,
+  PackageCheck,
   ShieldCheck,
-  Users,
+  UserCog,
+  Wrench,
 } from "lucide-react";
 import type { FeatureItem, StatItem } from "@/types/sections";
 
 export const FEATURES_SECTION = {
-  eyebrow: "Relocato Advantage",
-  title: "Why Corporate & Families Choose Relocato",
-  description:
-    "A structured, transparent approach to relocation — built on experience, insured handling, and a global network you can rely on.",
+  heading: {
+    prefix: "Why Corporates & Families Choose",
+    highlight: "Relocato Global",
+  },
 } as const;
 
 export const FEATURES: FeatureItem[] = [
   {
-    icon: Users,
-    title: "Experienced Team",
-    description:
-      "Years of relocation expertise across corporate and residential moves.",
+    icon: UserCog,
+    title: "Dedicated Move Managers",
+    description: "Single point coordination for streamlined communication.",
+  },
+  {
+    icon: ClipboardList,
+    title: "Structured Execution Process",
+    description: "Professionally managed SOP-based relocation handling.",
+  },
+  {
+    icon: MapPinned,
+    title: "PAN India Operational Reach",
+    description: "Serving relocations across major cities and regions.",
+  },
+  {
+    icon: PackageCheck,
+    title: "Premium Packing Standards",
+    description: "High-quality materials & organized handling practices.",
+  },
+  {
+    icon: Gauge,
+    title: "Minimal Operational Disruption",
+    description: "Efficient execution planning for smooth transitions.",
   },
   {
     icon: ShieldCheck,
-    title: "Fully Insured & Secure",
-    description:
-      "Comprehensive insurance coverage for complete peace of mind on every move.",
+    title: "Transit Risk Protection Support",
+    description: "Optional transit risk coverage for added peace of mind.",
   },
   {
-    icon: Globe2,
-    title: "Global Network",
+    icon: Wrench,
+    title: "Professional Installation Coordination",
     description:
-      "Trusted partners worldwide ensure smooth international transitions.",
-  },
-  {
-    icon: Clock,
-    title: "24/7 Dedicated Support",
-    description:
-      "Round-the-clock assistance from initial survey to final delivery.",
-  },
-  {
-    icon: BadgeCheck,
-    title: "Transparent Pricing",
-    description: "No hidden costs — clear, upfront quotes for every service.",
-  },
-  {
-    icon: HeartHandshake,
-    title: "Customized Solutions",
-    description:
-      "Relocation plans tailored to your timeline, budget & requirements.",
+      "Support for appliance handling & reinstallation requirements.",
   },
 ];
 

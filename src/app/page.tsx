@@ -2,7 +2,6 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/hero/HeroSection";
 import { QuoteSection } from "@/components/sections/quote/QuoteSection";
-import { ServicesSection } from "@/components/sections/services/ServicesSection";
 import { ServicesShowcaseSection } from "@/components/sections/services/ServicesShowcaseSection";
 import { WhyChooseUsSection } from "@/components/sections/features/WhyChooseUsSection";
 import { MobilityStatsSection } from "@/components/sections/features/MobilityStatsSection";
@@ -18,7 +17,6 @@ export default function Home() {
       <Header />
       <HeroSection imageSrc="/images/poster.png" />
       <QuoteSection />
-      <ServicesSection />
       <ServicesShowcaseSection />
       <WhyChooseUsSection />
       <MobilityStatsSection />
