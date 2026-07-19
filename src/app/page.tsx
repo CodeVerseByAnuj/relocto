@@ -1,6 +1,7 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/hero/HeroSection";
+import { QuoteSection } from "@/components/sections/quote/QuoteSection";
 import { ServicesSection } from "@/components/sections/services/ServicesSection";
 import { WhyChooseUsSection } from "@/components/sections/features/WhyChooseUsSection";
 import { MobilityStatsSection } from "@/components/sections/features/MobilityStatsSection";
@@ -15,6 +16,7 @@ export default function Home() {
     <div className="flex flex-1 flex-col">
       <Header />
       <HeroSection imageSrc="/images/poster.png" />
+      <QuoteSection />
       <ServicesSection />
       <WhyChooseUsSection />
       <MobilityStatsSection />
