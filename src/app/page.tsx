@@ -5,7 +5,7 @@ import { QuoteSection } from "@/components/sections/quote/QuoteSection";
 import { AboutSection } from "@/components/sections/about/AboutSection";
 import { ServicesShowcaseSection } from "@/components/sections/services/ServicesShowcaseSection";
 import { WhyChooseUsSection } from "@/components/sections/features/WhyChooseUsSection";
-import { MobilityStatsSection } from "@/components/sections/features/MobilityStatsSection";
+import { IndustriesSection } from "@/components/sections/industries/IndustriesSection";
 import { RelocationMethodSection } from "@/components/sections/process/RelocationMethodSection";
 import { PartnersSection } from "@/components/sections/partners/PartnersSection";
 import { GlobalCoverageSection } from "@/components/sections/coverage/GlobalCoverageSection";
@@ -21,7 +21,7 @@ export default function Home() {
       <ServicesShowcaseSection />
       <WhyChooseUsSection />
       <AboutSection />
-      <MobilityStatsSection />
+      <IndustriesSection />
       <RelocationMethodSection />
       <PartnersSection />
       <GlobalCoverageSection />

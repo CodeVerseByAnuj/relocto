@@ -7,7 +7,7 @@ import {
   UserCog,
   Wrench,
 } from "lucide-react";
-import type { FeatureItem, StatItem } from "@/types/sections";
+import type { FeatureItem } from "@/types/sections";
 
 export const FEATURES_SECTION = {
   heading: {
@@ -53,18 +53,4 @@ export const FEATURES: FeatureItem[] = [
     description:
       "Support for appliance handling & reinstallation requirements.",
   },
-];
-
-export const MOBILITY_STATS_SECTION = {
-  eyebrow: "Mobility Index",
-  title: "India's Fast-Growing Global Mobility Market",
-  description:
-    "As corporate mobility and cross-border relocation accelerate across India, Relocato delivers the structured, compliant support that HR and mobility teams need.",
-} as const;
-
-export const MOBILITY_STATS: StatItem[] = [
-  { value: "15+", label: "Years of Experience" },
-  { value: "500+", label: "Corporate Clients" },
-  { value: "50+", label: "Countries Served" },
-  { value: "98%", label: "Client Satisfaction" },
 ];

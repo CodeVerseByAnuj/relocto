@@ -29,6 +29,24 @@ export interface PartnerCategory {
   title: string;
 }
 
+export interface IndustryItem {
+  icon: LucideIcon;
+  image: string;
+  title: string;
+  description: string;
+}
+
+export interface StatWithIcon {
+  icon: LucideIcon;
+  value: string;
+  label: string;
+}
+
+export interface MapLocation {
+  coordinates: [number, number];
+  type: "own" | "partner";
+}
+
 export interface Testimonial {
   quote: string;
   author: string;
