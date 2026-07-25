@@ -16,7 +16,8 @@ export function Footer() {
           src="/images/footer.png"
           alt=""
           fill
-          className="scale-125 object-cover object-center"
+          sizes="100vw"
+          className="object-cover object-center"
           aria-hidden="true"
         />
 
