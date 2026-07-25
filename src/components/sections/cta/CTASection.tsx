@@ -7,7 +7,7 @@ export function CTASection() {
   const { heading, primaryCta, secondaryCta } = CTA_SECTION;
 
   return (
-    <section className="py-16 sm:py-20">
+    <section className="py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="relative min-h-105 overflow-hidden rounded-3xl sm:aspect-2/1 sm:min-h-0">
           <Image

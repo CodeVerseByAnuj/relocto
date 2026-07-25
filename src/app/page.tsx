@@ -21,9 +21,8 @@ export default function Home() {
       <ServicesShowcaseSection />
       <WhyChooseUsSection />
       <AboutSection />
-      <IndustriesSection />
       <RelocationMethodSection />
-      <PartnersSection />
+      <IndustriesSection />
       <GlobalCoverageSection />
       <TestimonialsSection />
       <CTASection />

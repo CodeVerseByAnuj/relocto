@@ -12,7 +12,7 @@ export function ServicesShowcaseSection() {
           <span className="inline-flex items-center rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-[0.15em] text-brand-accent uppercase">
             {SERVICES_SHOWCASE_SECTION.eyebrow}
           </span>
-          <h2 className="text-2xl font-extrabold tracking-tight text-white uppercase sm:text-3xl lg:text-4xl">
+          <h2 className="text-3xl font-extrabold tracking-tight text-white uppercase sm:text-4xl">
             {SERVICES_SHOWCASE_SECTION.title}
           </h2>
         </div>

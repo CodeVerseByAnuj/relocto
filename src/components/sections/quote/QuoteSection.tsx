@@ -24,7 +24,7 @@ export function QuoteSection() {
             {badge}
           </span>
 
-          <h2 className="mt-5 text-4xl font-extrabold tracking-tight text-brand-navy-dark sm:text-5xl lg:text-6xl">
+          <h2 className="mt-5 text-3xl font-extrabold tracking-tight text-brand-navy-dark sm:text-4xl">
             {heading.prefix} <span className="text-blue-600">{heading.highlightOne}</span>{" "}
             {heading.connector} <span className="text-blue-600">{heading.highlightTwo}</span>{" "}
             {heading.suffix}
