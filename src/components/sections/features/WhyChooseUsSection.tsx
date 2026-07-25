@@ -6,7 +6,7 @@ export function WhyChooseUsSection() {
 
   return (
     <section className="py-20 sm:py-24">
-      <div className="mx-auto max-w-6xl px-6 lg:px-10">
+      <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
           {heading.prefix} <span className="text-blue-600">{heading.highlight}</span>
         </h2>
