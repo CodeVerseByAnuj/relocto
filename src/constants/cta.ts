@@ -1,30 +1,36 @@
 export const CTA_SECTION = {
-  eyebrow: "Get Started",
-  title: "Looking for a Reliable Global Mobility Partner?",
-  description:
-    "Talk to our relocation specialists and get a structured proposal tailored to your move — corporate or household, local or international.",
-  primaryCta: { label: "Request Proposal", href: "/contact#proposal" },
-  secondaryCta: { label: "Schedule Survey", href: "/contact#survey" },
+  heading: {
+    line1: "Looking for a Reliable",
+    line2: "Global Mobility Partner?",
+  },
+  primaryCta: { label: "Request Consultation", href: "/contact#proposal" },
+  secondaryCta: { label: "Connect With Our Team", href: "/contact#survey" },
 } as const;
+
+export const FOOTER_DESCRIPTION =
+  "Experience a hassle-free, safe, and affordable relocation of your household or office anywhere in India. Safe and damage-free car transport service for personal and dealer vehicles. We offer dedicated trucks, honest pricing, and on-time delivery — request a quote now.";
 
 export const FOOTER_NAV_COLUMNS = [
   {
-    title: "Company",
+    title: "Quick Links",
     links: [
-      { label: "About Us", href: "/about" },
-      { label: "Our Process", href: "/process" },
-      { label: "Insights / Resources", href: "/insights" },
+      { label: "About", href: "/about" },
+      { label: "Services", href: "/services" },
+      { label: "Why Choose Us", href: "/#why-choose-us" },
+      { label: "Gallery", href: "/gallery" },
+      { label: "Testimonial", href: "/#testimonials" },
       { label: "Contact Us", href: "/contact" },
     ],
   },
   {
     title: "Services",
     links: [
-      { label: "International Relocation", href: "/services#international" },
-      { label: "Domestic Moving", href: "/services#domestic" },
-      { label: "Office Relocation", href: "/services#office" },
-      { label: "Vehicle Transportation", href: "/services#vehicle" },
-      { label: "Storage & Warehousing", href: "/services#storage" },
+      { label: "Home Relocation", href: "/services#home-relocation" },
+      { label: "Office Relocation", href: "/services#office-relocation" },
+      { label: "Car Moving", href: "/services#car-moving" },
+      { label: "Bike Moving", href: "/services#bike-moving" },
+      { label: "IBA Approved", href: "/services#iba-approved" },
+      { label: "Transportation", href: "/services#transportation" },
     ],
   },
 ] as const;
