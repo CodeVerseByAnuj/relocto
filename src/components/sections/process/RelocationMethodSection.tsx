@@ -17,7 +17,7 @@ export function RelocationMethodSection() {
             {PROCESS_SECTION.title}
           </h2>
           <div className="flex items-center gap-3">
-            <span className="h-0.5 w-8 rounded-full bg-blue-600" aria-hidden="true" />
+            <span className="h-0.5 w-8 rounded-full bg-brand-navy-light" aria-hidden="true" />
             <p className="text-sm text-muted-foreground sm:text-base">
               {PROCESS_SECTION.subtitle}
             </p>
@@ -26,7 +26,7 @@ export function RelocationMethodSection() {
 
         <ol className="relative mt-20 hidden gap-6 lg:flex">
           <svg
-            className="pointer-events-none absolute inset-x-0 top-1/2 h-40 w-full -translate-y-1/2 text-blue-200"
+            className="pointer-events-none absolute inset-x-0 top-1/2 h-40 w-full -translate-y-1/2 text-brand-navy-light/30"
             viewBox="0 0 1000 200"
             preserveAspectRatio="none"
             fill="none"
@@ -63,12 +63,12 @@ export function RelocationMethodSection() {
                       className="size-full object-cover"
                     />
                   </div>
-                  <span className="absolute -bottom-1 -left-1 flex size-7 items-center justify-center rounded-full border-2 border-white bg-blue-600 text-[0.65rem] font-bold text-white shadow">
+                  <span className="absolute -bottom-1 -left-1 flex size-7 items-center justify-center rounded-full border-2 border-white bg-brand-navy-light text-[0.65rem] font-bold text-white shadow">
                     {item.step}
                   </span>
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-blue-600">
+                  <h3 className="text-base font-bold text-brand-navy-light">
                     {item.title}
                   </h3>
                   <p className="mx-auto mt-1 max-w-44 text-xs leading-relaxed text-muted-foreground">
@@ -93,12 +93,12 @@ export function RelocationMethodSection() {
                     className="size-full object-cover"
                   />
                 </div>
-                <span className="absolute -bottom-1 -left-1 flex size-6 items-center justify-center rounded-full border-2 border-white bg-blue-600 text-[0.6rem] font-bold text-white shadow">
+                <span className="absolute -bottom-1 -left-1 flex size-6 items-center justify-center rounded-full border-2 border-white bg-brand-navy-light text-[0.6rem] font-bold text-white shadow">
                   {item.step}
                 </span>
               </div>
               <div>
-                <h3 className="text-base font-bold text-blue-600">
+                <h3 className="text-base font-bold text-brand-navy-light">
                   {item.title}
                 </h3>
                 <p className="mt-1 text-xs leading-relaxed text-muted-foreground">

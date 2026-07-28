@@ -5,12 +5,12 @@ export function IndustriesSection() {
   const { heading, description } = INDUSTRIES_SECTION;
 
   return (
-    <section className="py-20 sm:py-24">
+    <section className="bg-secondary/40 py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="flex flex-col items-center gap-3 text-center">
           <h2 className="text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
             {heading.prefix}{" "}
-            <span className="text-blue-500">{heading.highlight}</span>
+            <span className="text-brand-navy-light">{heading.highlight}</span>
           </h2>
           <p className="max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
             {description}
@@ -32,7 +32,7 @@ export function IndustriesSection() {
               <div className="flex size-9 items-center justify-center rounded-full bg-brand-accent/15 text-brand-navy">
                 <Icon className="size-4.5" aria-hidden="true" />
               </div>
-              <dd className="text-2xl font-extrabold text-blue-500 sm:text-3xl">
+              <dd className="text-2xl font-extrabold text-brand-navy sm:text-3xl">
                 {value}
               </dd>
               <dt className="text-sm text-muted-foreground">{label}</dt>

@@ -8,7 +8,7 @@ export function WhyChooseUsSection() {
     <section className="py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <h2 className="text-center text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
-          {heading.prefix} <span className="text-blue-600">{heading.highlight}</span>
+          {heading.prefix} <span className="text-brand-navy-light">{heading.highlight}</span>
         </h2>
 
         <div className="mt-12 flex flex-wrap justify-center gap-5">

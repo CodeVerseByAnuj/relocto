@@ -72,11 +72,11 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
-  --brand-navy: oklch(0.28 0.06 255);
-  --brand-navy-dark: oklch(0.18 0.05 255);
-  --brand-navy-light: oklch(0.38 0.07 255);
-  --brand-accent: oklch(0.8 0.13 210);
-  --brand-cream: oklch(0.97 0.015 90);
+  --brand-navy: oklch(0.4 0.168 260);
+  --brand-navy-dark: oklch(0.26 0.14 260);
+  --brand-navy-light: oklch(0.55 0.196 260);
+  --brand-accent: oklch(0.87 0.116 204);
+  --brand-cream: oklch(0.97 0.015 282);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);

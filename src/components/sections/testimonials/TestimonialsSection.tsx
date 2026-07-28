@@ -9,7 +9,7 @@ export function TestimonialsSection() {
           {TESTIMONIALS_SECTION.title}
         </h2>
         <div className="mt-3 flex items-center gap-3">
-          <span className="h-0.5 w-8 shrink-0 rounded-full bg-blue-500" />
+          <span className="h-0.5 w-8 shrink-0 rounded-full bg-brand-navy-light" />
           <p className="text-sm text-muted-foreground sm:text-base">
             {TESTIMONIALS_SECTION.description}
           </p>

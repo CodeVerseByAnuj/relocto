@@ -11,11 +11,11 @@ export function GlobalCoverageSection() {
   const { heading, tagline, legend, cta } = COVERAGE_SECTION;
 
   return (
-    <section className="bg-secondary/40 py-20 sm:py-24">
+    <section className="py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="flex flex-col items-center gap-3 text-center">
           <h2 className="text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
-            {heading.prefix} <span className="text-blue-500">{heading.highlight}</span>
+            {heading.prefix} <span className="text-brand-navy-light">{heading.highlight}</span>
           </h2>
           <p className="text-sm font-medium text-muted-foreground sm:text-base">
             {tagline.join("  |  ")}

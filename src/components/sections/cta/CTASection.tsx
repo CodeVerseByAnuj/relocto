@@ -24,7 +24,7 @@ export function CTASection() {
               <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
                 {heading.line1}
                 <br />
-                <span className="bg-linear-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
+                <span className="bg-linear-to-r from-brand-navy-light to-brand-accent bg-clip-text text-transparent">
                   {heading.line2}
                 </span>
               </h2>
