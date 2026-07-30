@@ -12,7 +12,10 @@ export function HeroSection({ imageSrc }: HeroSectionProps) {
     HOME_HERO_CONTENT;
 
   return (
-    <section className="relative flex min-h-[85vh] items-end overflow-hidden">
+    <section
+      id="home"
+      className="relative flex min-h-[85vh] items-end overflow-hidden"
+    >
       <HeroBackground imageSrc={imageSrc} imageAlt={heading} />
 
       <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-8 px-6 pb-16 pt-32 lg:grid-cols-[1.1fr_auto_1fr] lg:gap-10 lg:px-10">

@@ -6,7 +6,10 @@ export function QuoteSection() {
   const { badge, heading, description } = QUOTE_SECTION_CONTENT;
 
   return (
-    <section className="relative overflow-hidden bg-brand-cream py-20 sm:py-24">
+    <section
+      id="contact"
+      className="relative scroll-mt-24 overflow-hidden bg-brand-cream py-20 sm:py-24"
+    >
       <div className="absolute inset-0 -z-10">
         <Image
           src="/images/poster.png"

@@ -6,7 +6,10 @@ import {
 
 export function ServicesShowcaseSection() {
   return (
-    <section className="bg-gradient-to-br from-brand-navy-light via-brand-navy to-brand-navy-dark py-20 sm:py-24">
+    <section
+      id="services"
+      className="scroll-mt-24 bg-gradient-to-br from-brand-navy-light via-brand-navy to-brand-navy-dark py-20 sm:py-24"
+    >
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="flex flex-col items-center gap-3 text-center">
           <span className="inline-flex items-center rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-[0.15em] text-brand-accent uppercase">

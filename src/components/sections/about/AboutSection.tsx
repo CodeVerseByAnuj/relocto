@@ -8,7 +8,7 @@ export function AboutSection() {
     ABOUT_SECTION;
 
   return (
-    <section className="bg-brand-cream py-20 sm:py-24">
+    <section id="about" className="scroll-mt-24 bg-brand-cream py-20 sm:py-24">
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-6 lg:grid-cols-2 lg:gap-20 lg:px-10">
         <div>
           <span className="inline-flex items-center rounded-full border border-border px-4 py-1.5 text-xs font-semibold tracking-[0.15em] text-brand-navy uppercase">

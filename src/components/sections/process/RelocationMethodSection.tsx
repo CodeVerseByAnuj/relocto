@@ -10,7 +10,7 @@ import {
 
 export function RelocationMethodSection() {
   return (
-    <section className="bg-white py-20 sm:py-24">
+    <section id="process" className="scroll-mt-24 bg-white py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="flex flex-col items-center gap-3 text-center">
           <h2 className="text-3xl font-extrabold tracking-tight text-brand-navy-dark uppercase sm:text-4xl">
