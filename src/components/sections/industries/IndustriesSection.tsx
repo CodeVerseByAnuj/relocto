@@ -23,19 +23,21 @@ export function IndustriesSection() {
           ))}
         </div>
 
-        <dl className="mt-10 flex flex-col flex-wrap items-center justify-center gap-y-6 rounded-2xl border border-border bg-white px-8 py-8 sm:flex-row sm:divide-x sm:divide-border">
+        <dl className="mt-10 grid grid-cols-2 gap-x-4 gap-y-8 rounded-2xl border border-border bg-white px-6 py-8 sm:flex sm:flex-row sm:items-center sm:justify-center sm:gap-0 sm:divide-x sm:divide-border sm:px-8">
           {INDUSTRY_STATS.map(({ icon: Icon, value, label }) => (
             <div
               key={label}
-              className="flex w-1/2 flex-col items-center gap-2 px-6 sm:w-auto sm:flex-1"
+              className="flex flex-col items-center gap-2 px-2 text-center sm:w-auto sm:flex-1 sm:px-6"
             >
               <div className="flex size-9 items-center justify-center rounded-full bg-brand-accent/15 text-brand-navy">
                 <Icon className="size-4.5" aria-hidden="true" />
               </div>
-              <dd className="text-2xl font-extrabold text-brand-navy sm:text-3xl">
+              <dd className="text-xl font-extrabold text-brand-navy sm:text-3xl">
                 {value}
               </dd>
-              <dt className="text-sm text-muted-foreground">{label}</dt>
+              <dt className="text-xs leading-snug text-muted-foreground sm:text-sm">
+                {label}
+              </dt>
             </div>
           ))}
         </dl>

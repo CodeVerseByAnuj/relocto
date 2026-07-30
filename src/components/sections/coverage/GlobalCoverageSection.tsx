@@ -36,19 +36,21 @@ export function GlobalCoverageSection() {
             </div>
           </div>
 
-          <dl className="mt-4 flex flex-col flex-wrap items-center justify-center gap-y-6 divide-border border-t border-border pt-8 sm:flex-row sm:divide-x">
+          <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-8 divide-border border-t border-border pt-8 sm:flex sm:flex-row sm:items-center sm:justify-center sm:gap-0 sm:divide-x">
             {COVERAGE_STATS.map(({ icon: Icon, value, label }) => (
               <div
                 key={label}
-                className="flex w-1/2 flex-col items-center gap-2 px-6 sm:w-auto sm:flex-1"
+                className="flex flex-col items-center gap-2 px-2 text-center sm:w-auto sm:flex-1 sm:px-6"
               >
                 <div className="flex size-9 items-center justify-center rounded-full bg-brand-accent/15 text-brand-navy">
                   <Icon className="size-4.5" aria-hidden="true" />
                 </div>
-                <dd className="text-xl font-extrabold text-brand-navy sm:text-2xl">
+                <dd className="text-lg font-extrabold text-brand-navy sm:text-2xl">
                   {value}
                 </dd>
-                <dt className="text-sm text-muted-foreground">{label}</dt>
+                <dt className="text-xs leading-snug text-muted-foreground sm:text-sm">
+                  {label}
+                </dt>
               </div>
             ))}
           </dl>
