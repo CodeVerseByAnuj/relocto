@@ -1,10 +1,8 @@
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { ABOUT_SECTION } from "@/constants/about";
 
 export function AboutSection() {
-  const { eyebrow, heading, paragraphs, highlight, cta, image, stats } =
+  const { eyebrow, heading, paragraphs, highlight, image, stats } =
     ABOUT_SECTION;
 
   return (
@@ -28,16 +26,6 @@ export function AboutSection() {
           <p className="mt-5 max-w-md text-base leading-relaxed font-medium text-brand-navy-light">
             {highlight}
           </p>
-
-          <Button
-            variant="primary"
-            size="xl"
-            className="mt-8"
-            render={<a href={cta.href} />}
-          >
-            {cta.label}
-            <ArrowRight data-icon="inline-end" />
-          </Button>
         </div>
 
         <div className="relative pb-10 sm:pb-12">

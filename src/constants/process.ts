@@ -46,5 +46,5 @@ export const PROCESS_CTA = {
   title: "Ready for a Precision Move?",
   description:
     "Experience the difference of architectural relocation. Our team of experts is ready to map out your next move with millimetre precision.",
-  cta: { label: "Start Planning", href: "/contact#planning" },
+  cta: { label: "Start Planning", href: "/#contact" },
 } as const;

@@ -7,7 +7,6 @@ export const ABOUT_SECTION = {
   ],
   highlight:
     "Our objective is simple — to deliver professionally coordinated relocation experiences with maximum peace of mind and minimum disruption.",
-  cta: { label: "More About Us", href: "/about" },
   image: "/images/service1.png",
   stats: {
     members: { value: "+25", label: "Expert Members" },

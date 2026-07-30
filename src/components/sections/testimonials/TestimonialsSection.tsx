@@ -3,7 +3,7 @@ import { TESTIMONIALS, TESTIMONIALS_SECTION } from "@/constants/testimonials";
 
 export function TestimonialsSection() {
   return (
-    <section className="bg-secondary/40 py-20 sm:py-24">
+    <section id="testimonials" className="scroll-mt-24 bg-secondary/40 py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <h2 className="text-3xl font-extrabold tracking-tight text-brand-navy sm:text-4xl">
           {TESTIMONIALS_SECTION.title}

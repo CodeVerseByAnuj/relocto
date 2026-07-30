@@ -15,10 +15,6 @@ export const COVERAGE_SECTION = {
     own: "Our Locations",
     partner: "Partner Locations",
   },
-  cta: {
-    label: "Explore Global Coverage",
-    href: "#",
-  },
 } as const;
 
 export const COVERAGE_STATS: StatWithIcon[] = [

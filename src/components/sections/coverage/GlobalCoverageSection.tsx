@@ -1,5 +1,3 @@
-import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { WorldMap } from "@/components/sections/coverage/WorldMap";
 import {
   COVERAGE_LOCATIONS,
@@ -8,7 +6,7 @@ import {
 } from "@/constants/coverage";
 
 export function GlobalCoverageSection() {
-  const { heading, tagline, legend, cta } = COVERAGE_SECTION;
+  const { heading, tagline, legend } = COVERAGE_SECTION;
 
   return (
     <section className="py-20 sm:py-24">
@@ -54,13 +52,6 @@ export function GlobalCoverageSection() {
               </div>
             ))}
           </dl>
-        </div>
-
-        <div className="mt-10 flex justify-center">
-          <Button variant="primary" size="xl" render={<a href={cta.href} />}>
-            {cta.label}
-            <ArrowRight data-icon="inline-end" />
-          </Button>
         </div>
       </div>
     </section>
