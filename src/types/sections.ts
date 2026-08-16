@@ -47,6 +47,13 @@ export interface MapLocation {
   type: "own" | "partner";
 }
 
+export interface ServiceDetailItem {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+  features: string[];
+}
+
 export interface Testimonial {
   quote: string;
   author: string;

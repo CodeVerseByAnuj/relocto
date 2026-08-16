@@ -24,12 +24,12 @@ export const FOOTER_NAV_COLUMNS = [
   {
     title: "Services",
     links: [
-      { label: "Home Relocation", href: "/#services" },
-      { label: "Office Relocation", href: "/#services" },
-      { label: "Car Moving", href: "/#services" },
-      { label: "Bike Moving", href: "/#services" },
-      { label: "IBA Approved", href: "/#services" },
-      { label: "Transportation", href: "/#services" },
+      { label: "Household Shifting", href: "/services" },
+      { label: "Office Relocation", href: "/services" },
+      { label: "International Relocation", href: "/services" },
+      { label: "Vehicle Transportation", href: "/services" },
+      { label: "Warehousing & Storage", href: "/services" },
+      { label: "Packing & Unpacking", href: "/services" },
     ],
   },
 ] as const;
