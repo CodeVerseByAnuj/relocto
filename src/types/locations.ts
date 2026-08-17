@@ -4,5 +4,4 @@ export interface LocationItem {
   state: string;
   description: string;
   areas: string[];
-  image: string;
 }

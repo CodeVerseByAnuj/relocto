@@ -56,8 +56,9 @@ export function PetRelocationSection() {
           <div className="relative aspect-4/3 overflow-hidden rounded-3xl">
             <Image
               src={image}
-              alt="Relocato mover carefully handling a customer's belongings during a move"
+              alt="Illustration of a dog and cat traveling together safely in a pet carrier"
               fill
+              unoptimized
               sizes="(min-width: 1024px) 45vw, 90vw"
               className="object-cover object-right"
             />

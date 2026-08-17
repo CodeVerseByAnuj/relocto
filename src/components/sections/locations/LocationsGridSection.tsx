@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
+import { CityIllustration } from "@/components/common/CityIllustration";
 import { LOCATIONS, LOCATIONS_SECTION } from "@/constants/locations";
 
 export function LocationsGridSection() {
@@ -28,12 +28,12 @@ export function LocationsGridSection() {
               href={`/services/${location.slug}`}
               className="group relative flex aspect-square flex-col justify-end overflow-hidden rounded-2xl"
             >
-              <Image
-                src={location.image}
-                alt={location.city}
-                fill
-                sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              <CityIllustration
+                slug={location.slug}
+                city={location.city}
+                state={location.state}
+                variant="tile"
+                className="absolute inset-0 size-full transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-linear-to-t from-brand-navy-dark/90 via-brand-navy-dark/20 to-transparent" />
               <div className="relative flex items-center justify-between gap-2 p-4">

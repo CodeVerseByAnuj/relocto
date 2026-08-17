@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Dialog } from "@base-ui/react/dialog";
 import { Menu, Phone, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, isNavItemActive } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/common/Logo";
 import { MAIN_NAV_ITEMS } from "@/constants/navigation";
@@ -45,7 +45,7 @@ export function MobileMenu() {
                 onClick={() => setOpen(false)}
                 className={cn(
                   "rounded-lg px-3 py-3 text-base font-medium text-brand-navy/90 transition-colors hover:bg-brand-navy/5 hover:text-brand-navy",
-                  pathname === item.href &&
+                  isNavItemActive(pathname, item.href) &&
                     "bg-brand-navy/5 font-semibold text-brand-navy"
                 )}
               >

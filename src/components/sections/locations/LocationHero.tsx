@@ -1,6 +1,7 @@
 import { ArrowRight, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Breadcrumb } from "@/components/common/Breadcrumb";
+import { CityIllustration } from "@/components/common/CityIllustration";
 import { HeroBackground } from "@/components/sections/hero/HeroBackground";
 import { SITE_CONFIG } from "@/constants/site";
 import type { LocationItem } from "@/types/locations";
@@ -13,8 +14,15 @@ export function LocationHero({ location }: LocationHeroProps) {
   return (
     <section className="relative overflow-hidden pt-36 pb-16 sm:pt-40 sm:pb-20">
       <HeroBackground
-        imageSrc={location.image}
-        imageAlt={`Relocato movers in ${location.city}`}
+        render={
+          <CityIllustration
+            slug={location.slug}
+            city={location.city}
+            state={location.state}
+            variant="hero"
+            className="size-full"
+          />
+        }
       />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-10">

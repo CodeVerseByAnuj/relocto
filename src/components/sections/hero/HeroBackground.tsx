@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
@@ -5,16 +6,20 @@ interface HeroBackgroundProps {
   imageSrc?: string;
   imageAlt?: string;
   className?: string;
+  render?: ReactNode;
 }
 
 export function HeroBackground({
   imageSrc,
   imageAlt = "",
   className,
+  render,
 }: HeroBackgroundProps) {
   return (
     <div className={cn("absolute inset-0 -z-10 overflow-hidden", className)}>
-      {imageSrc ? (
+      {render ? (
+        render
+      ) : imageSrc ? (
         <Image
           src={imageSrc}
           alt={imageAlt}

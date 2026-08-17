@@ -10,6 +10,6 @@ export const PET_RELOCATION_SECTION = {
     "Door-to-door pet transport & live tracking",
   ],
   cta: { label: "Get a Pet Moving Quote", href: "#contact" },
-  image: "/images/partner.png",
+  image: "/images/pet-relocation.svg",
   badge: { value: "500+", label: "Pets Relocated Safely" },
 } as const;
