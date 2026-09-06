@@ -19,6 +19,17 @@ model AdminUser {
   updatedAt    DateTime @updatedAt
 }
 
+/// Uploaded image, stored in the database so it persists on any host without
+/// external object storage. Served via GET /api/media/[id].
+model MediaAsset {
+  id        String   @id @default(cuid())
+  filename  String
+  mimeType  String
+  size      Int
+  data      Bytes
+  createdAt DateTime @default(now())
+}
+
 /// One editable location-services page (e.g. /services/noida). Every section of
 /// that page is stored here so the admin panel can change it without code edits.
 model Location {

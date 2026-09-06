@@ -10,6 +10,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { SERVICE_ICON_NAMES, FEATURE_ICON_NAMES } from "@/lib/icons";
+import { ImageField } from "@/components/admin/ImageField";
 import {
   saveLocationAction,
   deleteLocationAction,
@@ -354,14 +355,13 @@ export function LocationEditor({ location }: { location: LocationWithContent }) 
             onChange={(v) => set("heroPhone", v)}
             placeholder="Defaults to site phone"
           />
-          <Text
-            label="Background image URL (optional)"
-            mono
-            value={form.heroImageUrl}
-            onChange={(v) => set("heroImageUrl", v)}
-            placeholder="Blank = generated illustration"
-          />
         </div>
+        <ImageField
+          label="Background image (optional)"
+          value={form.heroImageUrl}
+          onChange={(v) => set("heroImageUrl", v)}
+          hint="JPG, PNG or WebP up to 4 MB. Blank = generated city illustration."
+        />
       </Section>
 
       <Section
@@ -434,9 +434,8 @@ export function LocationEditor({ location }: { location: LocationWithContent }) 
                     )
                   }
                 />
-                <Text
-                  label="Image URL (optional)"
-                  mono
+                <ImageField
+                  label="Image (optional)"
                   value={service.imageUrl}
                   onChange={(v) =>
                     setServices((l) =>
