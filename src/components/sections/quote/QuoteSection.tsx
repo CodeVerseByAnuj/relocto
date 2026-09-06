@@ -2,9 +2,19 @@ import Image from "next/image";
 import { QuoteForm } from "@/components/sections/quote/QuoteForm";
 import { QUOTE_SECTION_CONTENT } from "@/constants/quote";
 
-export function QuoteSection() {
-  const { badge, heading, description } = QUOTE_SECTION_CONTENT;
+const DEFAULT_HEADING = `${QUOTE_SECTION_CONTENT.heading.prefix} ${QUOTE_SECTION_CONTENT.heading.highlightOne} ${QUOTE_SECTION_CONTENT.heading.connector} ${QUOTE_SECTION_CONTENT.heading.highlightTwo} ${QUOTE_SECTION_CONTENT.heading.suffix}`;
 
+interface QuoteSectionProps {
+  badge?: string;
+  heading?: string;
+  description?: string;
+}
+
+export function QuoteSection({
+  badge = QUOTE_SECTION_CONTENT.badge,
+  heading = DEFAULT_HEADING,
+  description = QUOTE_SECTION_CONTENT.description,
+}: QuoteSectionProps = {}) {
   return (
     <section
       id="contact"
@@ -28,9 +38,7 @@ export function QuoteSection() {
           </span>
 
           <h2 className="mt-5 text-3xl font-extrabold tracking-tight text-brand-navy-dark sm:text-4xl">
-            {heading.prefix} <span className="text-brand-navy-light">{heading.highlightOne}</span>{" "}
-            {heading.connector} <span className="text-brand-navy-light">{heading.highlightTwo}</span>{" "}
-            {heading.suffix}
+            {heading}
           </h2>
 
           <p className="mt-5 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">

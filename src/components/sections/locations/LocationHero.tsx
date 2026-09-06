@@ -3,25 +3,34 @@ import { Button } from "@/components/ui/button";
 import { Breadcrumb } from "@/components/common/Breadcrumb";
 import { CityIllustration } from "@/components/common/CityIllustration";
 import { HeroBackground } from "@/components/sections/hero/HeroBackground";
+import { LocationSwitcher } from "@/components/sections/locations/LocationSwitcher";
 import { SITE_CONFIG } from "@/constants/site";
-import type { LocationItem } from "@/types/locations";
+import type { LocationWithContent, LocationListItem } from "@/lib/queries/location";
 
 interface LocationHeroProps {
-  location: LocationItem;
+  location: LocationWithContent;
+  locations: LocationListItem[];
 }
 
-export function LocationHero({ location }: LocationHeroProps) {
+export function LocationHero({ location, locations }: LocationHeroProps) {
+  const phone = location.heroPhone?.trim() || SITE_CONFIG.phone;
+  const telHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
+
   return (
     <section className="relative overflow-hidden pt-36 pb-16 sm:pt-40 sm:pb-20">
       <HeroBackground
+        imageSrc={location.heroImageUrl ?? undefined}
+        imageAlt={`Packers and movers in ${location.city}`}
         render={
-          <CityIllustration
-            slug={location.slug}
-            city={location.city}
-            state={location.state}
-            variant="hero"
-            className="size-full"
-          />
+          location.heroImageUrl ? undefined : (
+            <CityIllustration
+              slug={location.slug}
+              city={location.city}
+              state={location.state}
+              variant="hero"
+              className="size-full"
+            />
+          )
         }
       />
 
@@ -34,29 +43,32 @@ export function LocationHero({ location }: LocationHeroProps) {
           ]}
         />
 
-        <span className="mt-6 inline-flex items-center rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-[0.15em] text-brand-accent uppercase">
-          Packers & Movers in {location.city}
-        </span>
+        <div className="mt-5 flex flex-wrap items-center gap-3">
+          <span className="inline-flex items-center rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-[0.15em] text-brand-accent uppercase">
+            {location.heroBadge}
+          </span>
+          <LocationSwitcher locations={locations} currentSlug={location.slug} />
+        </div>
 
         <h1 className="mt-4 max-w-2xl text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
-          Reliable Packers & Movers in {location.city}, {location.state}
+          {location.heroTitle}
         </h1>
         <p className="mt-4 max-w-xl text-base leading-relaxed text-white/90 sm:text-lg">
-          {location.description}
+          {location.heroDescription}
         </p>
 
         <div className="mt-8 flex flex-wrap items-center gap-4">
-          <Button variant="cream" size="xl" render={<a href="#contact" />}>
-            Get a Free Quote
+          <Button
+            variant="cream"
+            size="xl"
+            render={<a href={location.heroPrimaryCtaHref} />}
+          >
+            {location.heroPrimaryCtaLabel}
             <ArrowRight data-icon="inline-end" />
           </Button>
-          <Button
-            variant="glass"
-            size="xl"
-            render={<a href={`tel:${SITE_CONFIG.phone.replace(/[^+\d]/g, "")}`} />}
-          >
+          <Button variant="glass" size="xl" render={<a href={telHref} />}>
             <Phone data-icon="inline-start" />
-            {SITE_CONFIG.phone}
+            {phone}
           </Button>
         </div>
       </div>

@@ -1,12 +1,23 @@
 import { ServiceDetailCard } from "@/components/sections/services/ServiceDetailCard";
+import type { ServiceDetailCardProps } from "@/components/sections/services/ServiceDetailCard";
 import {
   SERVICES_DETAIL,
   SERVICES_DETAIL_SECTION,
 } from "@/constants/servicesDetail";
 
-export function ServicesDetailSection() {
-  const { eyebrow, title, description } = SERVICES_DETAIL_SECTION;
+interface ServicesDetailSectionProps {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  services?: ServiceDetailCardProps[];
+}
 
+export function ServicesDetailSection({
+  eyebrow = SERVICES_DETAIL_SECTION.eyebrow,
+  title = SERVICES_DETAIL_SECTION.title,
+  description = SERVICES_DETAIL_SECTION.description,
+  services = SERVICES_DETAIL,
+}: ServicesDetailSectionProps = {}) {
   return (
     <section className="bg-white py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
@@ -23,8 +34,8 @@ export function ServicesDetailSection() {
         </div>
 
         <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES_DETAIL.map((service) => (
-            <ServiceDetailCard key={service.title} {...service} />
+          {services.map((service, index) => (
+            <ServiceDetailCard key={`${service.title}-${index}`} {...service} />
           ))}
         </div>
       </div>

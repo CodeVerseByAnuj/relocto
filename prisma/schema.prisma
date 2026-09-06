@@ -10,23 +10,88 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Service {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  title       String
-  description String
-  // Icon name from lucide-react (e.g. "Home", "Truck"), resolved on the client.
-  icon        String?
-  // Optional showcase image path (e.g. "/images/service1.png").
-  image       String?
-  // Bullet-point features shown on the service detail card.
-  features    String[]
-  category    String?
-  // Manual sort order for listing; lower shows first.
-  order       Int      @default(0)
-  published   Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+/// One editable location-services page (e.g. /services/noida). Every section of
+/// that page is stored here so the admin panel can change it without code edits.
+model Location {
+  id        String  @id @default(cuid())
+  slug      String  @unique
+  city      String
+  state     String
+  published Boolean @default(true)
+  order     Int     @default(0)
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+
+  // Hero section
+  heroBadge           String
+  heroTitle           String
+  heroDescription     String
+  heroPrimaryCtaLabel String  @default("Get a Free Quote")
+  heroPrimaryCtaHref  String  @default("#contact")
+  heroPhone           String? // falls back to SITE_CONFIG.phone
+  heroImageUrl        String? // null -> generated CityIllustration SVG
+
+  // Services grid section header
+  servicesEyebrow     String
+  servicesTitle       String
+  servicesDescription String
+
+  // "Areas We Cover" section
+  areasTitle       String
+  areasDescription String
+  areas            String[]
+
+  // "Why Choose Us" section
+  whyTitle     String
+  whyHighlight String?
+
+  // Quote section copy
+  quoteBadge       String
+  quoteHeading     String
+  quoteDescription String
+
+  services LocationService[]
+  features LocationFeature[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([published, order])
+}
+
+model LocationService {
+  id          String   @id @default(cuid())
+  locationId  String
+  location    Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  order       Int      @default(0)
+  icon        String? // lucide-react icon name, resolved via src/lib/icons.ts
+  imageUrl    String?
+  title       String
+  description String
+  features    String[]
+
+  @@index([locationId, order])
+}
+
+model LocationFeature {
+  id          String   @id @default(cuid())
+  locationId  String
+  location    Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  order       Int      @default(0)
+  icon        String?
+  title       String
+  description String
+
+  @@index([locationId, order])
 }

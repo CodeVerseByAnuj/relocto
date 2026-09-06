@@ -3,8 +3,19 @@ import { ArrowRight, MapPin } from "lucide-react";
 import { CityIllustration } from "@/components/common/CityIllustration";
 import { LOCATIONS, LOCATIONS_SECTION } from "@/constants/locations";
 
-export function LocationsGridSection() {
+interface LocationsGridSectionProps {
+  locations?: { slug: string; city: string; state: string }[];
+}
+
+export function LocationsGridSection({
+  locations: provided,
+}: LocationsGridSectionProps = {}) {
   const { eyebrow, title, description } = LOCATIONS_SECTION;
+
+  const locations =
+    provided && provided.length > 0
+      ? provided
+      : LOCATIONS.map(({ slug, city, state }) => ({ slug, city, state }));
 
   return (
     <section className="bg-secondary/40 py-20 sm:py-24">
@@ -22,7 +33,7 @@ export function LocationsGridSection() {
         </div>
 
         <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          {LOCATIONS.map((location) => (
+          {locations.map((location) => (
             <Link
               key={location.slug}
               href={`/services/${location.slug}`}

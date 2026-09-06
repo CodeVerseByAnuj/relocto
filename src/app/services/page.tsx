@@ -7,6 +7,9 @@ import { PetRelocationSection } from "@/components/sections/services/PetRelocati
 import { LocationsGridSection } from "@/components/sections/locations/LocationsGridSection";
 import { WhyChooseUsSection } from "@/components/sections/features/WhyChooseUsSection";
 import { QuoteSection } from "@/components/sections/quote/QuoteSection";
+import { listPublishedLocations } from "@/lib/queries/location";
+
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Our Services | Relocato Packers and Movers",
@@ -14,14 +17,21 @@ export const metadata: Metadata = {
     "Household shifting, office relocation, international moving, vehicle transportation, warehousing, packing & insurance — explore Relocato's complete range of packers and movers services.",
 };
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  let locations: { slug: string; city: string; state: string }[] = [];
+  try {
+    locations = await listPublishedLocations();
+  } catch {
+    locations = [];
+  }
+
   return (
     <>
       <Header />
       <ServicesPageHero />
       <ServicesDetailSection />
       <PetRelocationSection />
-      <LocationsGridSection />
+      <LocationsGridSection locations={locations} />
       <WhyChooseUsSection />
       <QuoteSection />
       <Footer />

@@ -1,6 +1,15 @@
-import type { FeatureItem } from "@/types/sections";
+import type { LucideIcon } from "lucide-react";
+import { resolveFeatureIcon } from "@/lib/icons";
 
-export function FeatureCard({ icon: Icon, title, description }: FeatureItem) {
+export interface FeatureCardProps {
+  icon: LucideIcon | string | null;
+  title: string;
+  description: string;
+}
+
+export function FeatureCard({ icon, title, description }: FeatureCardProps) {
+  const Icon = typeof icon === "function" ? icon : resolveFeatureIcon(icon);
+
   return (
     <div className="w-full rounded-2xl border border-border bg-white p-6 sm:w-[calc(50%-10px)] lg:w-[calc(25%-15px)]">
       <div className="flex size-10 items-center justify-center rounded-xl bg-linear-to-br from-brand-navy-light to-brand-navy-dark text-white">
