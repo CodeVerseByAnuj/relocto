@@ -7,7 +7,7 @@ import { PetRelocationSection } from "@/components/sections/services/PetRelocati
 import { LocationsGridSection } from "@/components/sections/locations/LocationsGridSection";
 import { WhyChooseUsSection } from "@/components/sections/features/WhyChooseUsSection";
 import { QuoteSection } from "@/components/sections/quote/QuoteSection";
-import { listPublishedLocations } from "@/lib/queries/location";
+import { listLocationSearchEntries } from "@/lib/queries/location";
 
 export const revalidate = 300;
 
@@ -18,11 +18,11 @@ export const metadata: Metadata = {
 };
 
 export default async function ServicesPage() {
-  let locations: { slug: string; city: string; state: string }[] = [];
+  let searchEntries: Awaited<ReturnType<typeof listLocationSearchEntries>> = [];
   try {
-    locations = await listPublishedLocations();
+    searchEntries = await listLocationSearchEntries();
   } catch {
-    locations = [];
+    searchEntries = [];
   }
 
   return (
@@ -31,7 +31,7 @@ export default async function ServicesPage() {
       <ServicesPageHero />
       <ServicesDetailSection />
       <PetRelocationSection />
-      <LocationsGridSection locations={locations} />
+      <LocationsGridSection searchEntries={searchEntries} />
       <WhyChooseUsSection />
       <QuoteSection />
       <Footer />

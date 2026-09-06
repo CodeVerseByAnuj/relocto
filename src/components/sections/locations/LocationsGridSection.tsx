@@ -1,21 +1,28 @@
 import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
 import { CityIllustration } from "@/components/common/CityIllustration";
+import { LocationSearch } from "@/components/sections/locations/LocationSearch";
 import { LOCATIONS, LOCATIONS_SECTION } from "@/constants/locations";
+import type { LocationSearchEntry } from "@/lib/locationSearch";
 
 interface LocationsGridSectionProps {
-  locations?: { slug: string; city: string; state: string }[];
+  searchEntries?: LocationSearchEntry[];
 }
 
 export function LocationsGridSection({
-  locations: provided,
+  searchEntries,
 }: LocationsGridSectionProps = {}) {
   const { eyebrow, title, description } = LOCATIONS_SECTION;
 
-  const locations =
-    provided && provided.length > 0
-      ? provided
-      : LOCATIONS.map(({ slug, city, state }) => ({ slug, city, state }));
+  const entries: LocationSearchEntry[] =
+    searchEntries && searchEntries.length > 0
+      ? searchEntries
+      : LOCATIONS.map(({ slug, city, state, areas }) => ({
+          slug,
+          city,
+          state,
+          areas,
+        }));
 
   return (
     <section className="bg-secondary/40 py-20 sm:py-24">
@@ -30,10 +37,18 @@ export function LocationsGridSection({
           <p className="max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
             {description}
           </p>
+          <div className="mt-2 w-full max-w-md">
+            <LocationSearch
+              entries={entries}
+              tone="light"
+              placeholder="Search your city or area…"
+              className="mx-auto"
+            />
+          </div>
         </div>
 
         <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          {locations.map((location) => (
+          {entries.map((location) => (
             <Link
               key={location.slug}
               href={`/services/${location.slug}`}

@@ -8,6 +8,7 @@ import { Menu, Phone, X } from "lucide-react";
 import { cn, isNavItemActive } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/common/Logo";
+import { LocationSearch } from "@/components/sections/locations/LocationSearch";
 import { MAIN_NAV_ITEMS } from "@/constants/navigation";
 import { SITE_CONFIG } from "@/constants/site";
 
@@ -36,6 +37,13 @@ export function MobileMenu() {
               <X className="size-5" aria-hidden="true" />
             </Dialog.Close>
           </div>
+
+          <LocationSearch
+            tone="light"
+            placeholder="Find your city"
+            className="max-w-none"
+            onNavigate={() => setOpen(false)}
+          />
 
           <nav className="flex flex-col gap-1">
             {MAIN_NAV_ITEMS.map((item) => (

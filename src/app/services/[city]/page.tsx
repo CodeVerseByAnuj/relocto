@@ -9,7 +9,6 @@ import { WhyChooseUsSection } from "@/components/sections/features/WhyChooseUsSe
 import { QuoteSection } from "@/components/sections/quote/QuoteSection";
 import {
   getPublishedLocation,
-  listPublishedLocations,
   listPublishedSlugs,
 } from "@/lib/queries/location";
 
@@ -49,10 +48,7 @@ export default async function LocationServicePage({
   params,
 }: LocationPageProps) {
   const { city } = await params;
-  const [location, locations] = await Promise.all([
-    getPublishedLocation(city),
-    listPublishedLocations(),
-  ]);
+  const location = await getPublishedLocation(city);
 
   if (!location) {
     notFound();
@@ -61,7 +57,7 @@ export default async function LocationServicePage({
   return (
     <>
       <Header />
-      <LocationHero location={location} locations={locations} />
+      <LocationHero location={location} />
       <ServicesDetailSection
         eyebrow={location.servicesEyebrow}
         title={location.servicesTitle}

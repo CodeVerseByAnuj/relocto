@@ -3,16 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Breadcrumb } from "@/components/common/Breadcrumb";
 import { CityIllustration } from "@/components/common/CityIllustration";
 import { HeroBackground } from "@/components/sections/hero/HeroBackground";
-import { LocationSwitcher } from "@/components/sections/locations/LocationSwitcher";
 import { SITE_CONFIG } from "@/constants/site";
-import type { LocationWithContent, LocationListItem } from "@/lib/queries/location";
+import type { LocationWithContent } from "@/lib/queries/location";
 
 interface LocationHeroProps {
   location: LocationWithContent;
-  locations: LocationListItem[];
 }
 
-export function LocationHero({ location, locations }: LocationHeroProps) {
+export function LocationHero({ location }: LocationHeroProps) {
   const phone = location.heroPhone?.trim() || SITE_CONFIG.phone;
   const telHref = `tel:${phone.replace(/[^+\d]/g, "")}`;
 
@@ -43,12 +41,9 @@ export function LocationHero({ location, locations }: LocationHeroProps) {
           ]}
         />
 
-        <div className="mt-5 flex flex-wrap items-center gap-3">
-          <span className="inline-flex items-center rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-[0.15em] text-brand-accent uppercase">
-            {location.heroBadge}
-          </span>
-          <LocationSwitcher locations={locations} currentSlug={location.slug} />
-        </div>
+        <span className="mt-6 inline-flex w-fit items-center rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-[0.15em] text-brand-accent uppercase">
+          {location.heroBadge}
+        </span>
 
         <h1 className="mt-4 max-w-2xl text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
           {location.heroTitle}
