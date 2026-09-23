@@ -1,0 +1,64 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# Cancel an older run on the same branch when a newer commit arrives.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Lint, type-check & build
+    runs-on: ubuntu-latest
+    env:
+      # The build doesn't need a live DB (DB-backed routes render at request time),
+      # but Prisma needs a syntactically valid URL.
+      DATABASE_URL: postgresql://ci:ci@localhost:5432/ci?schema=public
+      NEXT_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npx tsc --noEmit
+      - run: npm run build
+
+      - name: Validate Prisma migrations
+        run: npx prisma validate
+
+      - name: Build Docker image
+        run: docker build -t relocato:ci .
+
+  deploy:
+    name: Deploy to server
+    needs: ci
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Pull & restart with Docker Compose over SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            set -e
+            cd "${{ secrets.APP_DIR }}"
+            git fetch --prune origin main
+            git reset --hard origin/main
+            docker compose up -d --build --remove-orphans
+            docker image prune -f
+            docker compose ps
