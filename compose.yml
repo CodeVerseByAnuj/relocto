@@ -30,16 +30,53 @@ services:
     container_name: relocato-api
     restart: unless-stopped
 
+    # All app variables (AUTH_SECRET, RESEND_API_KEY, ADMIN_*, ...) come from .env
+    env_file: .env
     environment:
       DATABASE_URL: ${DATABASE_URL}
       NODE_ENV: production
 
+    # Public traffic goes through Nginx; 3000 is only reachable from the server itself.
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
 
     depends_on:
       postgres:
         condition: service_healthy
 
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: relocato-nginx
+    restart: unless-stopped
+
+    ports:
+      - "80:80"
+      - "443:443"
+
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - certbot_conf:/etc/letsencrypt:ro
+      - certbot_www:/var/www/certbot:ro
+
+    # Reload every 6h so renewed certificates are picked up.
+    command: /bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'
+
+    depends_on:
+      - api
+
+  certbot:
+    image: certbot/certbot
+    container_name: relocato-certbot
+    restart: unless-stopped
+
+    volumes:
+      - certbot_conf:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+
+    # Renew certificates when they are close to expiry (checks every 12h).
+    entrypoint: /bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h & wait $${!}; done'
+
 volumes:
   postgres_data:
+  certbot_conf:
+  certbot_www:
