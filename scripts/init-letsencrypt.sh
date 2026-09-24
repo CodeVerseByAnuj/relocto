@@ -30,8 +30,22 @@ docker compose run --rm --entrypoint "sh -c '\
   echo dummy > $LIVE/README.dummy'" certbot
 
 echo "### Starting nginx ..."
-docker compose up -d nginx
-sleep 5
+# Recreate so a container stuck in a restart loop (no cert yet) starts fresh
+# with the temporary cert instead of waiting out its backoff.
+docker compose up -d --force-recreate nginx
+
+# Nginx must be up and serving port 80 before the temporary cert is removed:
+# it keeps the loaded cert in memory, but a restart after removal would fail.
+tries=0
+until docker compose exec -T nginx wget -q -O /dev/null "http://localhost/.well-known/acme-challenge/ping" 2>&1 | grep -q "404"; do
+  tries=$((tries + 1))
+  if [ "$tries" -ge 30 ]; then
+    echo "nginx did not start; check: docker compose logs nginx" >&2
+    exit 1
+  fi
+  sleep 2
+done
+echo "nginx is up."
 
 echo "### Removing temporary certificate ..."
 docker compose run --rm --entrypoint "rm -rf \
@@ -53,7 +67,7 @@ docker compose run --rm --entrypoint "certbot certonly --webroot -w /var/www/cer
   $DOMAIN_ARGS $EMAIL_ARG --agree-tos --non-interactive" certbot
 
 echo "### Reloading nginx ..."
-docker compose exec nginx nginx -s reload
+docker compose exec -T nginx nginx -s reload
 
 docker compose up -d certbot
 echo "### Done: https://$PRIMARY"
