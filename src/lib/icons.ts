@@ -1,10 +1,15 @@
 import {
+  Briefcase,
   Building2,
   Car,
   ClipboardList,
+  Compass,
+  FileCheck,
   Gauge,
   Globe2,
+  GraduationCap,
   Home,
+  KeyRound,
   MapPinned,
   Package,
   PackageCheck,
@@ -13,6 +18,7 @@ import {
   Sparkles,
   Truck,
   UserCog,
+  Users,
   Warehouse,
   Wrench,
 } from "lucide-react";
@@ -20,7 +26,7 @@ import type { LucideIcon } from "lucide-react";
 
 /**
  * Icon names an admin can pick in the CMS. Stored as strings on
- * LocationService.icon / LocationFeature.icon and resolved back to components
+ * Service.icon / LocationService.icon / LocationFeature.icon and resolved back to components
  * here so no arbitrary code is referenced from the database.
  */
 export const SERVICE_ICONS: Record<string, LucideIcon> = {
@@ -36,6 +42,12 @@ export const SERVICE_ICONS: Record<string, LucideIcon> = {
   ShieldCheck,
   Wrench,
   Sparkles,
+  Briefcase,
+  Users,
+  KeyRound,
+  GraduationCap,
+  Compass,
+  FileCheck,
 };
 
 export const FEATURE_ICONS: Record<string, LucideIcon> = {

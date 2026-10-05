@@ -1,19 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Dialog } from "@base-ui/react/dialog";
-import { Menu, Phone, X } from "lucide-react";
+import { ChevronDown, MapPin, Menu, Phone, X } from "lucide-react";
 import { cn, isNavItemActive } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/common/Logo";
 import { LocationSearch } from "@/components/sections/locations/LocationSearch";
-import { MAIN_NAV_ITEMS } from "@/constants/navigation";
+import { MAIN_NAV_ITEMS, SERVICES_NAV_HREF } from "@/constants/navigation";
 import { SITE_CONFIG } from "@/constants/site";
+import { useVisitorCity } from "@/lib/useVisitorCity";
+import type {
+  LocationMenuItem,
+  ServiceMenuCategory,
+} from "@/types/navigation";
 
-export function MobileMenu() {
+interface MobileMenuProps {
+  serviceMenu?: ServiceMenuCategory[];
+  locationMenu?: LocationMenuItem[];
+}
+
+export function MobileMenu({
+  serviceMenu = [],
+  locationMenu = [],
+}: MobileMenuProps) {
   const [open, setOpen] = useState(false);
+  const [locationsOpen, setLocationsOpen] = useState(false);
+  const visitorCity = useVisitorCity(locationMenu);
   const pathname = usePathname();
 
   return (
@@ -47,18 +62,79 @@ export function MobileMenu() {
 
           <nav className="flex flex-col gap-1">
             {MAIN_NAV_ITEMS.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className={cn(
-                  "rounded-lg px-3 py-3 text-base font-medium text-brand-navy/90 transition-colors hover:bg-brand-navy/5 hover:text-brand-navy",
-                  isNavItemActive(pathname, item.href) &&
-                    "bg-brand-navy/5 font-semibold text-brand-navy"
-                )}
-              >
-                {item.label}
-              </Link>
+              <Fragment key={item.href}>
+                <Link
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className={cn(
+                    "rounded-lg px-3 py-3 text-base font-medium text-brand-navy/90 transition-colors hover:bg-brand-navy/5 hover:text-brand-navy",
+                    isNavItemActive(pathname, item.href) &&
+                      "bg-brand-navy/5 font-semibold text-brand-navy"
+                  )}
+                >
+                  {item.label}
+                </Link>
+                {item.href === SERVICES_NAV_HREF && serviceMenu.length > 0 ? (
+                  <div className="mb-1 ml-3 flex flex-col border-l border-brand-navy/10 pl-2">
+                    {serviceMenu.map((category) => (
+                      <Link
+                        key={category.slug}
+                        href={category.href}
+                        onClick={() => setOpen(false)}
+                        className="rounded-lg px-3 py-2.5 text-sm font-medium text-brand-navy/80 transition-colors hover:bg-brand-navy/5 hover:text-brand-navy"
+                      >
+                        {category.name}
+                      </Link>
+                    ))}
+                  </div>
+                ) : null}
+                {item.href === SERVICES_NAV_HREF && locationMenu.length > 0 ? (
+                  <>
+                    <button
+                      type="button"
+                      aria-expanded={locationsOpen}
+                      onClick={() => setLocationsOpen((value) => !value)}
+                      className="flex items-center justify-between rounded-lg px-3 py-3 text-left text-base font-medium text-brand-navy/90 transition-colors hover:bg-brand-navy/5 hover:text-brand-navy"
+                    >
+                      Locations
+                      <ChevronDown
+                        className={cn(
+                          "size-4 transition-transform duration-200",
+                          locationsOpen && "rotate-180"
+                        )}
+                        aria-hidden="true"
+                      />
+                    </button>
+                    {visitorCity ? (
+                      <Link
+                        href={visitorCity.location.href}
+                        onClick={() => setOpen(false)}
+                        className="ml-3 flex items-center gap-2 rounded-lg bg-brand-accent/15 px-3 py-2.5 text-sm font-semibold text-brand-navy"
+                      >
+                        <MapPin className="size-4 shrink-0" aria-hidden="true" />
+                        {visitorCity.source === "detected"
+                          ? "Your city"
+                          : "Recently viewed"}
+                        : {visitorCity.location.city}
+                      </Link>
+                    ) : null}
+                    {locationsOpen ? (
+                      <div className="mb-1 ml-3 flex flex-col border-l border-brand-navy/10 pl-2">
+                        {locationMenu.map((location) => (
+                          <Link
+                            key={location.slug}
+                            href={location.href}
+                            onClick={() => setOpen(false)}
+                            className="rounded-lg px-3 py-2.5 text-sm font-medium text-brand-navy/80 transition-colors hover:bg-brand-navy/5 hover:text-brand-navy"
+                          >
+                            {location.city}
+                          </Link>
+                        ))}
+                      </div>
+                    ) : null}
+                  </>
+                ) : null}
+              </Fragment>
             ))}
           </nav>
 

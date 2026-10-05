@@ -11,6 +11,8 @@ import { GlobalCoverageSection } from "@/components/sections/coverage/GlobalCove
 import { TestimonialsSection } from "@/components/sections/testimonials/TestimonialsSection";
 import { CTASection } from "@/components/sections/cta/CTASection";
 
+export const revalidate = 300;
+
 export default function Home() {
   return (
     <>

@@ -1,5 +1,6 @@
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import type { LocationMenuItem } from "@/types/navigation";
 
 export type LocationWithContent = Prisma.LocationGetPayload<{
   include: {
@@ -35,6 +36,20 @@ export function listPublishedLocations(): Promise<LocationListItem[]> {
     orderBy: [{ order: "asc" }, { city: "asc" }],
     select: { id: true, slug: true, city: true, state: true, order: true },
   });
+}
+
+/** Published cities shaped for the header "Locations" dropdown; [] if the DB is down. */
+export async function getLocationMenu(): Promise<LocationMenuItem[]> {
+  try {
+    const locations = await listPublishedLocations();
+    return locations.map(({ slug, city }) => ({
+      slug,
+      city,
+      href: `/services/${slug}`,
+    }));
+  } catch {
+    return [];
+  }
 }
 
 export function listPublishedSlugs(): Promise<{ slug: string }[]> {

@@ -95,6 +95,38 @@ model LocationService {
   @@index([locationId, order])
 }
 
+/// A group of services shown as one entry in the header "Services" dropdown and
+/// as one section on /services (e.g. "Corporate Services").
+model ServiceCategory {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  name        String
+  description String?
+  published   Boolean @default(true)
+  order       Int     @default(0)
+
+  services Service[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, order])
+}
+
+model Service {
+  id          String          @id @default(cuid())
+  categoryId  String
+  category    ServiceCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  order       Int             @default(0)
+  icon        String? // lucide-react icon name, resolved via src/lib/icons.ts
+  imageUrl    String?
+  title       String
+  description String
+  features    String[]
+
+  @@index([categoryId, order])
+}
+
 model LocationFeature {
   id          String   @id @default(cuid())
   locationId  String

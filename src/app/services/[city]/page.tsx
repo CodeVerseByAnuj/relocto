@@ -4,6 +4,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { LocationHero } from "@/components/sections/locations/LocationHero";
 import { LocationAreasSection } from "@/components/sections/locations/LocationAreasSection";
+import { ServicesPageHero } from "@/components/sections/services/ServicesPageHero";
 import { ServicesDetailSection } from "@/components/sections/services/ServicesDetailSection";
 import { WhyChooseUsSection } from "@/components/sections/features/WhyChooseUsSection";
 import { QuoteSection } from "@/components/sections/quote/QuoteSection";
@@ -11,18 +12,29 @@ import {
   getPublishedLocation,
   listPublishedSlugs,
 } from "@/lib/queries/location";
+import {
+  getPublishedServiceCategory,
+  listPublishedServiceCategories,
+  type ServiceCategoryWithServices,
+} from "@/lib/queries/serviceCategory";
 
 export const revalidate = 300;
 export const dynamicParams = true;
 
+// This segment serves two kinds of pages: a service category
+// (/services/corporate-services) or a location (/services/noida). The admin
+// panel keeps their slugs from clashing; a category wins if they ever do.
 interface LocationPageProps {
   params: Promise<{ city: string }>;
 }
 
 export async function generateStaticParams() {
   try {
-    const slugs = await listPublishedSlugs();
-    return slugs.map(({ slug }) => ({ city: slug }));
+    const [locations, categories] = await Promise.all([
+      listPublishedSlugs(),
+      listPublishedServiceCategories(),
+    ]);
+    return [...categories, ...locations].map(({ slug }) => ({ city: slug }));
   } catch {
     return [];
   }
@@ -32,6 +44,19 @@ export async function generateMetadata({
   params,
 }: LocationPageProps): Promise<Metadata> {
   const { city } = await params;
+
+  const category = await getPublishedServiceCategory(city);
+  if (category) {
+    return {
+      title: `${category.name} | Relocato Packers and Movers`,
+      description:
+        category.description ??
+        `Explore Relocato's ${category.name.toLowerCase()}: ${category.services
+          .map((service) => service.title)
+          .join(", ")}.`,
+    };
+  }
+
   const location = await getPublishedLocation(city);
   if (!location) return {};
 
@@ -44,10 +69,53 @@ export async function generateMetadata({
   };
 }
 
+function ServiceCategoryPage({
+  category,
+}: {
+  category: ServiceCategoryWithServices;
+}) {
+  return (
+    <>
+      <Header />
+      <ServicesPageHero
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Services", href: "/services" },
+          { label: category.name },
+        ]}
+        eyebrow="Our Services"
+        title={category.name}
+        description={category.description}
+      />
+      <ServicesDetailSection
+        eyebrow={null}
+        title={`Our ${category.name}`}
+        description={null}
+        services={category.services.map((service) => ({
+          icon: service.icon,
+          imageUrl: service.imageUrl,
+          title: service.title,
+          description: service.description,
+          features: service.features,
+        }))}
+      />
+      <WhyChooseUsSection />
+      <QuoteSection />
+      <Footer />
+    </>
+  );
+}
+
 export default async function LocationServicePage({
   params,
 }: LocationPageProps) {
   const { city } = await params;
+
+  const category = await getPublishedServiceCategory(city);
+  if (category) {
+    return <ServiceCategoryPage category={category} />;
+  }
+
   const location = await getPublishedLocation(city);
 
   if (!location) {

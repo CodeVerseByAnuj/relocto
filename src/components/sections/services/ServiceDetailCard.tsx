@@ -4,6 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import { resolveServiceIcon } from "@/lib/icons";
 
 export interface ServiceDetailCardProps {
+  id?: string;
   icon: LucideIcon | string | null;
   imageUrl?: string | null;
   title: string;
@@ -12,6 +13,7 @@ export interface ServiceDetailCardProps {
 }
 
 export function ServiceDetailCard({
+  id,
   icon,
   imageUrl,
   title,
@@ -21,7 +23,10 @@ export function ServiceDetailCard({
   const Icon = typeof icon === "function" ? icon : resolveServiceIcon(icon);
 
   return (
-    <div className="flex flex-col rounded-2xl border border-border bg-white p-6 transition-shadow hover:shadow-lg hover:shadow-brand-navy-dark/5 sm:p-7">
+    <div
+      id={id}
+      className="flex scroll-mt-24 flex-col rounded-2xl border border-border bg-white p-6 transition-shadow hover:shadow-lg hover:shadow-brand-navy-dark/5 sm:p-7"
+    >
       {imageUrl ? (
         <div className="relative mb-4 aspect-video overflow-hidden rounded-xl">
           <Image

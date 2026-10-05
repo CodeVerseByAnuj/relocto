@@ -7,7 +7,7 @@ const optionalText = z
   .optional()
   .transform((v) => (v ? v : null));
 
-const slug = trimmed
+export const slugSchema = trimmed
   .min(1, "Slug is required")
   .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use lowercase letters, numbers and hyphens");
 
@@ -26,7 +26,7 @@ export const featureItemSchema = z.object({
 });
 
 export const locationContentSchema = z.object({
-  slug,
+  slug: slugSchema,
   city: trimmed.min(1, "City is required"),
   state: trimmed.min(1, "State is required"),
   published: z.boolean().default(true),
@@ -66,7 +66,7 @@ export type LocationContentInput = z.input<typeof locationContentSchema>;
 export type LocationContentParsed = z.output<typeof locationContentSchema>;
 
 export const createLocationSchema = z.object({
-  slug,
+  slug: slugSchema,
   city: trimmed.min(1, "City is required"),
   state: trimmed.min(1, "State is required"),
 });

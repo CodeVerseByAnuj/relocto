@@ -5,23 +5,34 @@ import { MobileMenu } from "@/components/navigation/MobileMenu";
 import { LocationSearch } from "@/components/sections/locations/LocationSearch";
 import { Button } from "@/components/ui/button";
 import { SITE_CONFIG } from "@/constants/site";
+import { getLocationMenu } from "@/lib/queries/location";
+import { getServiceMenu } from "@/lib/queries/serviceCategory";
 
-export function Header() {
+export async function Header() {
+  const [serviceMenu, locationMenu] = await Promise.all([
+    getServiceMenu(),
+    getLocationMenu(),
+  ]);
+
   return (
     <header className="absolute inset-x-0 top-0 z-50">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 rounded-b-2xl bg-white/90 px-4 py-3 shadow-sm backdrop-blur-md sm:px-6 lg:gap-6 lg:px-10 lg:py-4">
         <Logo />
-        <MainNavigation className="lg:gap-6" />
+        <MainNavigation
+          className="lg:gap-5"
+          serviceMenu={serviceMenu}
+          locationMenu={locationMenu}
+        />
         <LocationSearch
           tone="light"
           placeholder="Find your city"
-          className="ml-auto hidden w-52 lg:block xl:w-60"
+          className="ml-auto hidden w-40 xl:block"
         />
         <div className="flex items-center gap-2">
           <Button
             variant="primary"
             size="icon-lg"
-            className="lg:hidden"
+            className="xl:hidden"
             render={
               <a
                 href={`tel:${SITE_CONFIG.phone.replace(/[^+\d]/g, "")}`}
@@ -34,13 +45,13 @@ export function Header() {
           <Button
             variant="primary"
             size="xl"
-            className="hidden lg:inline-flex"
+            className="hidden xl:inline-flex"
             render={<a href={`tel:${SITE_CONFIG.phone.replace(/[^+\d]/g, "")}`} />}
           >
             <Phone data-icon="inline-start" />
             Call Now {SITE_CONFIG.phone}
           </Button>
-          <MobileMenu />
+          <MobileMenu serviceMenu={serviceMenu} locationMenu={locationMenu} />
         </div>
       </div>
     </header>

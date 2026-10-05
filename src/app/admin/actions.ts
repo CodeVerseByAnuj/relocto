@@ -21,6 +21,15 @@ import {
   revalidateLocation,
   saveLocationContent,
 } from "@/lib/queries/locationMutations";
+import {
+  createServiceCategorySchema,
+  serviceCategorySchema,
+} from "@/lib/schemas/serviceCategory";
+import {
+  createServiceCategory,
+  revalidateServiceCategories,
+  saveServiceCategory,
+} from "@/lib/queries/serviceCategoryMutations";
 
 export type ActionResult = { ok: true } | { ok: false; error: string };
 
@@ -80,6 +89,10 @@ export async function createLocationAction(
   if (existing) {
     return { ok: false, error: `A location with slug "${parsed.data.slug}" already exists.` };
   }
+  // Locations and service categories share the /services/<slug> URL space.
+  if (await prisma.serviceCategory.findUnique({ where: { slug: parsed.data.slug }, select: { id: true } })) {
+    return { ok: false, error: `Slug "${parsed.data.slug}" is used by a service category.` };
+  }
 
   const content = locationContentSchema.parse({
     ...parsed.data,
@@ -114,6 +127,9 @@ export async function saveLocationAction(
   if (clash) {
     return { ok: false, error: `Slug "${parsed.data.slug}" is used by another location.` };
   }
+  if (await prisma.serviceCategory.findUnique({ where: { slug: parsed.data.slug }, select: { id: true } })) {
+    return { ok: false, error: `Slug "${parsed.data.slug}" is used by a service category.` };
+  }
 
   await saveLocationContent(id, parsed.data);
   revalidatePath(`/admin/locations/${id}`);
@@ -138,6 +154,84 @@ export async function togglePublishAction(
   });
   revalidateLocation(location.slug);
   revalidatePath("/admin");
+}
+
+export async function createServiceCategoryAction(
+  _prev: ActionResult | null,
+  formData: FormData
+): Promise<ActionResult> {
+  await requireAdmin();
+
+  const parsed = createServiceCategorySchema.safeParse({
+    slug: formData.get("slug"),
+    name: formData.get("name"),
+  });
+  if (!parsed.success) {
+    return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  }
+
+  const existing = await prisma.serviceCategory.findUnique({
+    where: { slug: parsed.data.slug },
+    select: { id: true },
+  });
+  if (existing) {
+    return { ok: false, error: `A category with slug "${parsed.data.slug}" already exists.` };
+  }
+  if (await prisma.location.findUnique({ where: { slug: parsed.data.slug }, select: { id: true } })) {
+    return { ok: false, error: `Slug "${parsed.data.slug}" is used by a location page.` };
+  }
+
+  const category = await createServiceCategory(parsed.data);
+  redirect(`/admin/services/${category.id}`);
+}
+
+export async function saveServiceCategoryAction(
+  id: string,
+  payload: unknown
+): Promise<ActionResult> {
+  await requireAdmin();
+
+  const parsed = serviceCategorySchema.safeParse(payload);
+  if (!parsed.success) {
+    const issue = parsed.error.issues[0];
+    return {
+      ok: false,
+      error: issue
+        ? `${issue.path.join(".") || "form"}: ${issue.message}`
+        : "Validation failed",
+    };
+  }
+
+  const clash = await prisma.serviceCategory.findFirst({
+    where: { slug: parsed.data.slug, NOT: { id } },
+    select: { id: true },
+  });
+  if (clash) {
+    return { ok: false, error: `Slug "${parsed.data.slug}" is used by another category.` };
+  }
+  if (await prisma.location.findUnique({ where: { slug: parsed.data.slug }, select: { id: true } })) {
+    return { ok: false, error: `Slug "${parsed.data.slug}" is used by a location page.` };
+  }
+
+  await saveServiceCategory(id, parsed.data);
+  revalidatePath(`/admin/services/${id}`);
+  return { ok: true };
+}
+
+export async function deleteServiceCategoryAction(id: string): Promise<void> {
+  await requireAdmin();
+  await prisma.serviceCategory.delete({ where: { id } });
+  revalidateServiceCategories();
+  redirect("/admin/services");
+}
+
+export async function toggleServiceCategoryPublishAction(
+  id: string,
+  published: boolean
+): Promise<void> {
+  await requireAdmin();
+  await prisma.serviceCategory.update({ where: { id }, data: { published } });
+  revalidateServiceCategories();
 }
 
 const passwordSchema = z

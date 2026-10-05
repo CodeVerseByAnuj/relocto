@@ -13,7 +13,7 @@ export function NavLink({ item, isActive = false, className }: NavLinkProps) {
     <Link
       href={item.href}
       className={cn(
-        "text-sm font-medium text-brand-navy/90 transition-colors hover:text-brand-navy",
+        "text-sm font-medium whitespace-nowrap text-brand-navy/90 transition-colors hover:text-brand-navy",
         isActive && "font-semibold text-brand-navy",
         className
       )}

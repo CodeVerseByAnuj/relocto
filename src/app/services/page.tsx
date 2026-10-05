@@ -8,6 +8,7 @@ import { LocationsGridSection } from "@/components/sections/locations/LocationsG
 import { WhyChooseUsSection } from "@/components/sections/features/WhyChooseUsSection";
 import { QuoteSection } from "@/components/sections/quote/QuoteSection";
 import { listLocationSearchEntries } from "@/lib/queries/location";
+import { listPublishedServiceCategories } from "@/lib/queries/serviceCategory";
 
 export const revalidate = 300;
 
@@ -25,11 +26,33 @@ export default async function ServicesPage() {
     searchEntries = [];
   }
 
+  const categories = await listPublishedServiceCategories();
+
   return (
     <>
       <Header />
       <ServicesPageHero />
-      <ServicesDetailSection />
+      {categories.length > 0 ? (
+        categories.map((category, index) => (
+          <ServicesDetailSection
+            key={category.id}
+            id={category.slug}
+            className={index % 2 === 1 ? "bg-muted/40" : undefined}
+            eyebrow={index === 0 ? undefined : null}
+            title={category.name}
+            description={category.description}
+            services={category.services.map((service) => ({
+              icon: service.icon,
+              imageUrl: service.imageUrl,
+              title: service.title,
+              description: service.description,
+              features: service.features,
+            }))}
+          />
+        ))
+      ) : (
+        <ServicesDetailSection />
+      )}
       <PetRelocationSection />
       <LocationsGridSection searchEntries={searchEntries} />
       <WhyChooseUsSection />
