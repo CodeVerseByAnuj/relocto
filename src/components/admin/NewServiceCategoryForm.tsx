@@ -1,6 +1,7 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
+import { useActionState } from "@/lib/useActionState";
 import {
   createServiceCategoryAction,
   type ActionResult,
@@ -21,7 +22,7 @@ function SubmitButton() {
 }
 
 export function NewServiceCategoryForm() {
-  const [state, formAction] = useFormState<ActionResult | null, FormData>(
+  const [state, formAction] = useActionState<ActionResult | null, FormData>(
     createServiceCategoryAction,
     null
   );

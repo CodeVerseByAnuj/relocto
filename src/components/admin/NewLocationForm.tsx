@@ -1,6 +1,7 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
+import { useActionState } from "@/lib/useActionState";
 import { createLocationAction, type ActionResult } from "@/app/admin/actions";
 
 function SubmitButton() {
@@ -21,7 +22,7 @@ const field =
 const labelCls = "mb-1 block text-xs font-semibold text-slate-700";
 
 export function NewLocationForm() {
-  const [state, formAction] = useFormState<ActionResult | null, FormData>(
+  const [state, formAction] = useActionState<ActionResult | null, FormData>(
     createLocationAction,
     null
   );

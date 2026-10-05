@@ -1,6 +1,7 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
+import { useActionState } from "@/lib/useActionState";
 import {
   changePasswordAction,
   type ActionResult,
@@ -24,7 +25,7 @@ function SubmitButton() {
 }
 
 export function ChangePasswordForm() {
-  const [state, formAction] = useFormState<ActionResult | null, FormData>(
+  const [state, formAction] = useActionState<ActionResult | null, FormData>(
     changePasswordAction,
     null
   );

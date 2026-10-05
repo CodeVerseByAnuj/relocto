@@ -7,7 +7,7 @@ export const serviceCategorySchema = z.object({
   slug: slugSchema,
   name: trimmed.min(1, "Category name is required"),
   description: trimmed
-    .optional()
+    .nullish()
     .transform((v) => (v ? v : null)),
   published: z.boolean().default(true),
   order: z.coerce.number().int().min(0).default(0),

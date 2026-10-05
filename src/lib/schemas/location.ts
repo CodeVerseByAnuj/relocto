@@ -4,7 +4,7 @@ const trimmed = z.string().trim();
 const optionalText = z
   .string()
   .trim()
-  .optional()
+  .nullish()
   .transform((v) => (v ? v : null));
 
 export const slugSchema = trimmed
