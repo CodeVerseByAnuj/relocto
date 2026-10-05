@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const trimmed = z.string().trim();
-const optionalText = z
+export const optionalText = z
   .string()
   .trim()
   .nullish()

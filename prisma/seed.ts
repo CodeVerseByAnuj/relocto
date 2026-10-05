@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { LOCATIONS } from "../src/constants/locations.ts";
 import { DEFAULT_SERVICE_CATEGORIES } from "../src/constants/serviceCategories.ts";
+import { DEFAULT_BLOG_POSTS } from "../src/constants/blogPosts.ts";
 import { buildDefaultLocationContent } from "../src/lib/defaultLocationContent.ts";
 
 const prisma = new PrismaClient();
@@ -90,10 +91,29 @@ async function seedServiceCategories() {
   console.log(`• Seeded ${created} new service categories.`);
 }
 
+async function seedBlogPosts() {
+  let created = 0;
+  for (const post of DEFAULT_BLOG_POSTS) {
+    const existing = await prisma.blogPost.findUnique({
+      where: { slug: post.slug },
+      select: { id: true },
+    });
+    // Articles are managed in the admin panel; never overwrite edits.
+    if (existing) continue;
+
+    await prisma.blogPost.create({
+      data: { ...post, published: true, publishedAt: new Date() },
+    });
+    created += 1;
+  }
+  console.log(`• Seeded ${created} new blog articles.`);
+}
+
 async function main() {
   await seedAdmin();
   await seedLocations();
   await seedServiceCategories();
+  await seedBlogPosts();
 }
 
 main()

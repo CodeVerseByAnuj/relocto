@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LayoutGrid, LogOut, MapPin, UserCog } from "lucide-react";
+import { LayoutGrid, LogOut, MapPin, Newspaper, UserCog } from "lucide-react";
 import { logoutAction } from "@/app/admin/actions";
 
 interface AdminShellProps {
@@ -27,6 +27,12 @@ export function AdminShell({ admin, children }: AdminShellProps) {
             className="flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-slate-700 hover:bg-slate-100"
           >
             <LayoutGrid className="size-4" /> Services
+          </Link>
+          <Link
+            href="/admin/blog"
+            className="flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-slate-700 hover:bg-slate-100"
+          >
+            <Newspaper className="size-4" /> Blog
           </Link>
           <Link
             href="/admin/account"

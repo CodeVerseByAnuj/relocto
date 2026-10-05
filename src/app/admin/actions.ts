@@ -30,6 +30,8 @@ import {
   revalidateServiceCategories,
   saveServiceCategory,
 } from "@/lib/queries/serviceCategoryMutations";
+import { blogPostSchema, createBlogPostSchema } from "@/lib/schemas/blogPost";
+import { slugify } from "@/lib/utils";
 
 export type ActionResult = { ok: true } | { ok: false; error: string };
 
@@ -232,6 +234,107 @@ export async function toggleServiceCategoryPublishAction(
   await requireAdmin();
   await prisma.serviceCategory.update({ where: { id }, data: { published } });
   revalidateServiceCategories();
+}
+
+function revalidateBlog(...slugs: string[]) {
+  revalidatePath("/blog");
+  for (const slug of slugs) revalidatePath(`/blog/${slug}`);
+}
+
+export async function createBlogPostAction(
+  _prev: ActionResult | null,
+  formData: FormData
+): Promise<ActionResult> {
+  await requireAdmin();
+
+  const parsed = createBlogPostSchema.safeParse({
+    title: formData.get("title"),
+    slug: formData.get("slug") ?? undefined,
+  });
+  if (!parsed.success) {
+    return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  }
+
+  const slug = slugify(parsed.data.slug || parsed.data.title);
+  if (!slug) {
+    return { ok: false, error: "Enter a URL slug using letters or numbers." };
+  }
+  const existing = await prisma.blogPost.findUnique({
+    where: { slug },
+    select: { id: true },
+  });
+  if (existing) {
+    return { ok: false, error: `An article with slug "${slug}" already exists.` };
+  }
+
+  const post = await prisma.blogPost.create({
+    data: { slug, title: parsed.data.title, excerpt: "", content: "" },
+  });
+  redirect(`/admin/blog/${post.id}`);
+}
+
+export async function saveBlogPostAction(
+  id: string,
+  payload: unknown
+): Promise<ActionResult> {
+  await requireAdmin();
+
+  const parsed = blogPostSchema.safeParse(payload);
+  if (!parsed.success) {
+    const issue = parsed.error.issues[0];
+    return {
+      ok: false,
+      error: issue
+        ? `${issue.path.join(".") || "form"}: ${issue.message}`
+        : "Validation failed",
+    };
+  }
+
+  const clash = await prisma.blogPost.findFirst({
+    where: { slug: parsed.data.slug, NOT: { id } },
+    select: { id: true },
+  });
+  if (clash) {
+    return { ok: false, error: `Slug "${parsed.data.slug}" is used by another article.` };
+  }
+
+  const previous = await prisma.blogPost.findUnique({
+    where: { id },
+    select: { slug: true, publishedAt: true },
+  });
+  if (!previous) return { ok: false, error: "This article no longer exists." };
+
+  // An explicit date wins; otherwise stamp the first time it is published.
+  const publishedAt =
+    parsed.data.publishedAt ??
+    previous.publishedAt ??
+    (parsed.data.published ? new Date() : null);
+
+  await prisma.blogPost.update({
+    where: { id },
+    data: { ...parsed.data, publishedAt },
+  });
+  revalidateBlog(previous.slug, parsed.data.slug);
+  revalidatePath(`/admin/blog/${id}`);
+  return { ok: true };
+}
+
+export async function deleteBlogPostAction(id: string): Promise<void> {
+  await requireAdmin();
+  const post = await prisma.blogPost.delete({ where: { id } });
+  revalidateBlog(post.slug);
+  redirect("/admin/blog");
+}
+
+/** Drafts are published from the editor, where missing content is reported. */
+export async function unpublishBlogPostAction(id: string): Promise<void> {
+  await requireAdmin();
+  const post = await prisma.blogPost.update({
+    where: { id },
+    data: { published: false },
+  });
+  revalidateBlog(post.slug);
+  revalidatePath("/admin/blog");
 }
 
 const passwordSchema = z

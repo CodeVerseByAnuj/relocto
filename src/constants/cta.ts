@@ -18,6 +18,7 @@ export const FOOTER_NAV_COLUMNS = [
       { label: "Services", href: "/#services" },
       { label: "Why Choose Us", href: "/#why-choose-us" },
       { label: "Testimonial", href: "/#testimonials" },
+      { label: "Blog", href: "/blog" },
       { label: "Contact Us", href: "/#contact" },
     ],
   },

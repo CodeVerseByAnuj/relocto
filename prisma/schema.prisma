@@ -138,3 +138,27 @@ model LocationFeature {
 
   @@index([locationId, order])
 }
+
+/// One blog article, shown on /blog and at /blog/<slug>. Written in the admin
+/// panel; `content` is Markdown.
+model BlogPost {
+  id            String    @id @default(cuid())
+  slug          String    @unique
+  title         String
+  excerpt       String
+  content       String
+  coverImageUrl String?
+  category      String?
+  author        String?
+  published     Boolean   @default(false)
+  publishedAt   DateTime?
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, publishedAt])
+}

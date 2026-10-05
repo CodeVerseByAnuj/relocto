@@ -19,14 +19,14 @@ export async function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 rounded-b-2xl bg-white/90 px-4 py-3 shadow-sm backdrop-blur-md sm:px-6 lg:gap-6 lg:px-10 lg:py-4">
         <Logo />
         <MainNavigation
-          className="lg:gap-5"
+          className="lg:gap-4"
           serviceMenu={serviceMenu}
           locationMenu={locationMenu}
         />
         <LocationSearch
           tone="light"
-          placeholder="Find your city"
-          className="ml-auto hidden w-40 xl:block"
+          placeholder="Find city"
+          className="ml-auto hidden w-36 xl:block"
         />
         <div className="flex items-center gap-2">
           <Button

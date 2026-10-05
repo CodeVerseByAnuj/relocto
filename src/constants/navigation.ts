@@ -8,5 +8,6 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
   { label: "About Us", href: "/#about" },
   { label: "Services", href: SERVICES_NAV_HREF },
   { label: "Process", href: "/#process" },
+  { label: "Blog", href: "/blog" },
   { label: "Contact Us", href: "#contact" },
 ];
