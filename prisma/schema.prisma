@@ -240,3 +240,11 @@ model Inquiry {
 
   @@index([status, createdAt])
 }
+
+/// Records that a set of starter content has been installed (see
+/// src/lib/bootstrap.ts), so it is added once and never re-created after an
+/// admin edits or deletes it.
+model AppliedSeed {
+  key       String   @id
+  appliedAt DateTime @default(now())
+}

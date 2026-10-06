@@ -1,4 +1,3 @@
-const NAVY = "oklch(0.4 0.168 260)";
 const NAVY_DARK = "oklch(0.26 0.14 260)";
 const NAVY_LIGHT = "oklch(0.55 0.196 260)";
 const ACCENT = "oklch(0.87 0.116 204)";
