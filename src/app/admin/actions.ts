@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { InquiryStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import {
   createSession,
@@ -421,6 +422,24 @@ export async function toggleAboutPagePublishAction(
   await requireAdmin();
   await prisma.aboutPage.update({ where: { id }, data: { published } });
   revalidateAbout();
+}
+
+export async function setInquiryStatusAction(
+  id: string,
+  status: string
+): Promise<void> {
+  await requireAdmin();
+  const parsed = z.enum(InquiryStatus).safeParse(status);
+  if (!parsed.success) return;
+  await prisma.inquiry.update({ where: { id }, data: { status: parsed.data } });
+  // The sidebar shows the count of new inquiries on every admin page.
+  revalidatePath("/admin", "layout");
+}
+
+export async function deleteInquiryAction(id: string): Promise<void> {
+  await requireAdmin();
+  await prisma.inquiry.delete({ where: { id } });
+  revalidatePath("/admin", "layout");
 }
 
 const passwordSchema = z

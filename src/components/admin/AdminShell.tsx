@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {
+  Inbox,
   Info,
   LayoutGrid,
   LogOut,
@@ -8,13 +9,18 @@ import {
   UserCog,
 } from "lucide-react";
 import { logoutAction } from "@/app/admin/actions";
+import { prisma } from "@/lib/prisma";
 
 interface AdminShellProps {
   admin: { email: string; name: string | null };
   children: React.ReactNode;
 }
 
-export function AdminShell({ admin, children }: AdminShellProps) {
+export async function AdminShell({ admin, children }: AdminShellProps) {
+  const newInquiries = await prisma.inquiry
+    .count({ where: { status: "NEW" } })
+    .catch(() => 0);
+
   return (
     <div className="flex min-h-screen bg-slate-50 text-slate-900">
       <aside className="flex w-60 shrink-0 flex-col border-r border-slate-200 bg-white">
@@ -23,6 +29,17 @@ export function AdminShell({ admin, children }: AdminShellProps) {
           <p className="mt-0.5 truncate text-xs text-slate-500">{admin.email}</p>
         </div>
         <nav className="flex flex-1 flex-col gap-1 p-3 text-sm">
+          <Link
+            href="/admin/inquiries"
+            className="flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-slate-700 hover:bg-slate-100"
+          >
+            <Inbox className="size-4" /> Inquiries
+            {newInquiries > 0 ? (
+              <span className="ml-auto rounded-full bg-amber-500 px-2 py-0.5 text-xs font-bold text-white">
+                {newInquiries}
+              </span>
+            ) : null}
+          </Link>
           <Link
             href="/admin"
             className="flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-slate-700 hover:bg-slate-100"

@@ -216,3 +216,27 @@ model AboutPage {
 
   @@index([published, order])
 }
+
+enum InquiryStatus {
+  NEW
+  CONTACTED
+  CLOSED
+}
+
+/// One submission of the website quote/contact form, listed at /admin/inquiries.
+model Inquiry {
+  id         String        @id @default(cuid())
+  name       String
+  email      String
+  phone      String
+  country    String
+  movingFrom String?
+  movingTo   String?
+  message    String?
+  /// Page the form was submitted from, e.g. /services/noida.
+  sourcePath String?
+  status     InquiryStatus @default(NEW)
+  createdAt  DateTime      @default(now())
+
+  @@index([status, createdAt])
+}
