@@ -162,3 +162,57 @@ model BlogPost {
 
   @@index([published, publishedAt])
 }
+
+/// One page under the header "About Us" dropdown (/about/<slug>), e.g. "Our
+/// Story" or "Careers". Every section is optional and is hidden on the site
+/// when left empty. The Json columns hold small ordered lists whose shape is
+/// enforced by src/lib/schemas/aboutPage.ts.
+model AboutPage {
+  id        String  @id @default(cuid())
+  slug      String  @unique
+  title     String
+  published Boolean @default(false)
+  order     Int     @default(0)
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+
+  // Hero
+  heroDescription String?
+  heroImageUrl    String?
+
+  // Intro: text beside an image
+  introEyebrow  String?
+  introHeading  String?
+  introBody     String?
+  introImageUrl String?
+
+  /// Free-form Markdown shown after the intro.
+  content String?
+
+  // History timeline: [{ year, title, description, imageUrl }]
+  timelineTitle String?
+  timeline      Json    @default("[]")
+
+  // Values, vision and mission: values = [{ title, description }]
+  valuesTitle String?
+  values      Json    @default("[]")
+  vision      String?
+  mission     String?
+
+  // Numbers: [{ value, label }]
+  statsTitle String?
+  stats      Json    @default("[]")
+
+  // Accreditation / partner logos: [{ name, imageUrl }]
+  logosTitle String?
+  logos      Json    @default("[]")
+
+  showTestimonials Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, order])
+}

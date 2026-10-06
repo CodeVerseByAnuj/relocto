@@ -11,6 +11,7 @@ interface ServicesPageHeroProps {
   eyebrow?: string;
   title?: string;
   description?: string | null;
+  imageSrc?: string;
 }
 
 export function ServicesPageHero({
@@ -18,10 +19,11 @@ export function ServicesPageHero({
   eyebrow = SERVICES_PAGE_HERO.eyebrow,
   title = SERVICES_PAGE_HERO.title,
   description = SERVICES_PAGE_HERO.description,
+  imageSrc = "/images/poster.png",
 }: ServicesPageHeroProps = {}) {
   return (
     <section className="relative overflow-hidden pt-36 pb-16 sm:pt-40 sm:pb-20">
-      <HeroBackground imageSrc="/images/poster.png" imageAlt={title} />
+      <HeroBackground imageSrc={imageSrc} imageAlt={title} />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <Breadcrumb items={breadcrumb} />

@@ -31,6 +31,7 @@ import {
   saveServiceCategory,
 } from "@/lib/queries/serviceCategoryMutations";
 import { blogPostSchema, createBlogPostSchema } from "@/lib/schemas/blogPost";
+import { aboutPageSchema, createAboutPageSchema } from "@/lib/schemas/aboutPage";
 import { slugify } from "@/lib/utils";
 
 export type ActionResult = { ok: true } | { ok: false; error: string };
@@ -335,6 +336,91 @@ export async function unpublishBlogPostAction(id: string): Promise<void> {
   });
   revalidateBlog(post.slug);
   revalidatePath("/admin/blog");
+}
+
+/** The About Us dropdown is in the header of every public page. */
+function revalidateAbout() {
+  revalidatePath("/", "layout");
+}
+
+export async function createAboutPageAction(
+  _prev: ActionResult | null,
+  formData: FormData
+): Promise<ActionResult> {
+  await requireAdmin();
+
+  const parsed = createAboutPageSchema.safeParse({
+    title: formData.get("title"),
+    slug: formData.get("slug") ?? undefined,
+  });
+  if (!parsed.success) {
+    return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  }
+
+  const slug = slugify(parsed.data.slug || parsed.data.title);
+  if (!slug) {
+    return { ok: false, error: "Enter a URL slug using letters or numbers." };
+  }
+  const existing = await prisma.aboutPage.findUnique({
+    where: { slug },
+    select: { id: true },
+  });
+  if (existing) {
+    return { ok: false, error: `A page with slug "${slug}" already exists.` };
+  }
+
+  const last = await prisma.aboutPage.aggregate({ _max: { order: true } });
+  const page = await prisma.aboutPage.create({
+    data: { slug, title: parsed.data.title, order: (last._max.order ?? -1) + 1 },
+  });
+  redirect(`/admin/about/${page.id}`);
+}
+
+export async function saveAboutPageAction(
+  id: string,
+  payload: unknown
+): Promise<ActionResult> {
+  await requireAdmin();
+
+  const parsed = aboutPageSchema.safeParse(payload);
+  if (!parsed.success) {
+    const issue = parsed.error.issues[0];
+    return {
+      ok: false,
+      error: issue
+        ? `${issue.path.join(".") || "form"}: ${issue.message}`
+        : "Validation failed",
+    };
+  }
+
+  const clash = await prisma.aboutPage.findFirst({
+    where: { slug: parsed.data.slug, NOT: { id } },
+    select: { id: true },
+  });
+  if (clash) {
+    return { ok: false, error: `Slug "${parsed.data.slug}" is used by another page.` };
+  }
+
+  await prisma.aboutPage.update({ where: { id }, data: parsed.data });
+  revalidateAbout();
+  revalidatePath(`/admin/about/${id}`);
+  return { ok: true };
+}
+
+export async function deleteAboutPageAction(id: string): Promise<void> {
+  await requireAdmin();
+  await prisma.aboutPage.delete({ where: { id } });
+  revalidateAbout();
+  redirect("/admin/about");
+}
+
+export async function toggleAboutPagePublishAction(
+  id: string,
+  published: boolean
+): Promise<void> {
+  await requireAdmin();
+  await prisma.aboutPage.update({ where: { id }, data: { published } });
+  revalidateAbout();
 }
 
 const passwordSchema = z

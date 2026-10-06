@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { LOCATIONS } from "../src/constants/locations.ts";
 import { DEFAULT_SERVICE_CATEGORIES } from "../src/constants/serviceCategories.ts";
 import { DEFAULT_BLOG_POSTS } from "../src/constants/blogPosts.ts";
+import { DEFAULT_ABOUT_PAGES } from "../src/constants/aboutPages.ts";
 import { buildDefaultLocationContent } from "../src/lib/defaultLocationContent.ts";
 
 const prisma = new PrismaClient();
@@ -109,11 +110,30 @@ async function seedBlogPosts() {
   console.log(`• Seeded ${created} new blog articles.`);
 }
 
+async function seedAboutPages() {
+  let created = 0;
+  for (const [index, page] of DEFAULT_ABOUT_PAGES.entries()) {
+    const existing = await prisma.aboutPage.findUnique({
+      where: { slug: page.slug },
+      select: { id: true },
+    });
+    // About pages are managed in the admin panel; never overwrite edits.
+    if (existing) continue;
+
+    await prisma.aboutPage.create({
+      data: { ...page, order: index, published: true },
+    });
+    created += 1;
+  }
+  console.log(`• Seeded ${created} new about pages.`);
+}
+
 async function main() {
   await seedAdmin();
   await seedLocations();
   await seedServiceCategories();
   await seedBlogPosts();
+  await seedAboutPages();
 }
 
 main()

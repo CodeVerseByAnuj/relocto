@@ -9,10 +9,15 @@ import { cn, isNavItemActive } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/common/Logo";
 import { LocationSearch } from "@/components/sections/locations/LocationSearch";
-import { MAIN_NAV_ITEMS, SERVICES_NAV_HREF } from "@/constants/navigation";
+import {
+  ABOUT_NAV_HREF,
+  MAIN_NAV_ITEMS,
+  SERVICES_NAV_HREF,
+} from "@/constants/navigation";
 import { SITE_CONFIG } from "@/constants/site";
 import { useVisitorCity } from "@/lib/useVisitorCity";
 import type {
+  AboutMenuItem,
   LocationMenuItem,
   ServiceMenuCategory,
 } from "@/types/navigation";
@@ -20,11 +25,13 @@ import type {
 interface MobileMenuProps {
   serviceMenu?: ServiceMenuCategory[];
   locationMenu?: LocationMenuItem[];
+  aboutMenu?: AboutMenuItem[];
 }
 
 export function MobileMenu({
   serviceMenu = [],
   locationMenu = [],
+  aboutMenu = [],
 }: MobileMenuProps) {
   const [open, setOpen] = useState(false);
   const [locationsOpen, setLocationsOpen] = useState(false);
@@ -74,6 +81,20 @@ export function MobileMenu({
                 >
                   {item.label}
                 </Link>
+                {item.href === ABOUT_NAV_HREF && aboutMenu.length > 0 ? (
+                  <div className="mb-1 ml-3 flex flex-col border-l border-brand-navy/10 pl-2">
+                    {aboutMenu.map((page) => (
+                      <Link
+                        key={page.slug}
+                        href={page.href}
+                        onClick={() => setOpen(false)}
+                        className="rounded-lg px-3 py-2.5 text-sm font-medium text-brand-navy/80 transition-colors hover:bg-brand-navy/5 hover:text-brand-navy"
+                      >
+                        {page.title}
+                      </Link>
+                    ))}
+                  </div>
+                ) : null}
                 {item.href === SERVICES_NAV_HREF && serviceMenu.length > 0 ? (
                   <div className="mb-1 ml-3 flex flex-col border-l border-brand-navy/10 pl-2">
                     {serviceMenu.map((category) => (

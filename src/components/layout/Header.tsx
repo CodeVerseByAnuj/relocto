@@ -5,13 +5,15 @@ import { MobileMenu } from "@/components/navigation/MobileMenu";
 import { LocationSearch } from "@/components/sections/locations/LocationSearch";
 import { Button } from "@/components/ui/button";
 import { SITE_CONFIG } from "@/constants/site";
+import { getAboutMenu } from "@/lib/queries/aboutPage";
 import { getLocationMenu } from "@/lib/queries/location";
 import { getServiceMenu } from "@/lib/queries/serviceCategory";
 
 export async function Header() {
-  const [serviceMenu, locationMenu] = await Promise.all([
+  const [serviceMenu, locationMenu, aboutMenu] = await Promise.all([
     getServiceMenu(),
     getLocationMenu(),
+    getAboutMenu(),
   ]);
 
   return (
@@ -22,6 +24,7 @@ export async function Header() {
           className="lg:gap-4"
           serviceMenu={serviceMenu}
           locationMenu={locationMenu}
+          aboutMenu={aboutMenu}
         />
         <LocationSearch
           tone="light"
@@ -51,7 +54,11 @@ export async function Header() {
             <Phone data-icon="inline-start" />
             Call Now {SITE_CONFIG.phone}
           </Button>
-          <MobileMenu serviceMenu={serviceMenu} locationMenu={locationMenu} />
+          <MobileMenu
+            serviceMenu={serviceMenu}
+            locationMenu={locationMenu}
+            aboutMenu={aboutMenu}
+          />
         </div>
       </div>
     </header>

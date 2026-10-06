@@ -17,6 +17,13 @@ export interface LocationMenuItem {
   href: string;
 }
 
+/** One page in the header "About Us" dropdown. */
+export interface AboutMenuItem {
+  slug: string;
+  title: string;
+  href: string;
+}
+
 export interface BreadcrumbItem {
   label: string;
   href?: string;

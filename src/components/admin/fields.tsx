@@ -1,5 +1,7 @@
 "use client";
 
+import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
+
 export const field =
   "w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none";
 export const labelCls = "mb-1 block text-xs font-semibold text-slate-700";
@@ -113,6 +115,88 @@ export function IconSelect({
           </option>
         ))}
       </select>
+    </div>
+  );
+}
+
+/** An ordered, editable list of rows with move up/down, remove and add. */
+export function RowList<T>({
+  items,
+  onChange,
+  itemLabel,
+  blank,
+  children,
+}: {
+  items: T[];
+  onChange: (items: T[]) => void;
+  /** Singular name shown on each row and the add button, e.g. "Milestone". */
+  itemLabel: string;
+  /** A new empty row. */
+  blank: T;
+  children: (item: T, update: (patch: Partial<T>) => void) => React.ReactNode;
+}) {
+  function move(index: number, dir: -1 | 1) {
+    const target = index + dir;
+    if (target < 0 || target >= items.length) return;
+    const next = [...items];
+    [next[index], next[target]] = [next[target], next[index]];
+    onChange(next);
+  }
+
+  return (
+    <div className="space-y-3">
+      {items.map((item, index) => (
+        <div
+          key={index}
+          className="rounded-lg border border-slate-200 bg-slate-50/60 p-4"
+        >
+          <div className="mb-3 flex items-center justify-between">
+            <span className="text-xs font-semibold text-slate-500">
+              {itemLabel} {index + 1}
+            </span>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                aria-label="Move up"
+                onClick={() => move(index, -1)}
+                className="rounded p-1 text-slate-400 hover:bg-slate-200 hover:text-slate-700"
+              >
+                <ArrowUp className="size-3.5" />
+              </button>
+              <button
+                type="button"
+                aria-label="Move down"
+                onClick={() => move(index, 1)}
+                className="rounded p-1 text-slate-400 hover:bg-slate-200 hover:text-slate-700"
+              >
+                <ArrowDown className="size-3.5" />
+              </button>
+              <button
+                type="button"
+                aria-label="Remove"
+                onClick={() => onChange(items.filter((_, i) => i !== index))}
+                className="rounded p-1 text-red-400 hover:bg-red-100 hover:text-red-600"
+              >
+                <Trash2 className="size-3.5" />
+              </button>
+            </div>
+          </div>
+          <div className="space-y-3">
+            {children(item, (patch) =>
+              onChange(
+                items.map((row, i) => (i === index ? { ...row, ...patch } : row))
+              )
+            )}
+          </div>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => onChange([...items, blank])}
+        className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-slate-300 px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100"
+      >
+        <Plus className="size-4" /> Add {itemLabel.toLowerCase()}
+      </button>
     </div>
   );
 }
