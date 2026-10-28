@@ -248,3 +248,69 @@ model AppliedSeed {
   key       String   @id
   appliedAt DateTime @default(now())
 }
+
+/// A group of movable goods on the price calculator, e.g. "Furniture" or
+/// "Electronics". Edited at /admin/pricing.
+model ItemCategory {
+  id    String      @id @default(cuid())
+  name  String
+  order Int         @default(0)
+  items PriceItem[]
+}
+
+/// One thing that can be moved (e.g. "Sofa"), priced per piece in INR.
+model PriceItem {
+  id         String       @id @default(cuid())
+  categoryId String
+  category   ItemCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  name       String
+  price      Int
+  order      Int          @default(0)
+
+  @@index([categoryId, order])
+}
+
+/// Distance charges for the price calculator. A single row with id "default".
+model PricingSettings {
+  id         String @id @default("default")
+  /// Flat charge added to every move, INR.
+  baseCharge Int    @default(0)
+  /// Charge per driven kilometre, INR.
+  perKmRate  Int    @default(0)
+  /// A quote never goes below this, INR.
+  minCharge  Int    @default(0)
+}
+
+enum PriceRequestStatus {
+  NEW
+  SENT
+  CLOSED
+}
+
+/// A customer's request for a moving price from /get-quote. The admin reviews
+/// it at /admin/price-requests and sends the estimate by WhatsApp / email PDF.
+model PriceRequest {
+  id            String             @id @default(cuid())
+  /// Unguessable id used in the public PDF link shared with the customer.
+  token         String             @unique @default(cuid())
+  name          String
+  email         String
+  phone         String
+  fromLabel     String
+  toLabel       String
+  km            Float
+  /// Snapshot of the chosen items: [{ category, name, quantity, unitPrice }].
+  items         Json
+  itemsTotal    Int
+  distanceCharge Int
+  /// What the rate card computed when the request came in, INR.
+  estimate      Int
+  /// What the admin quotes the customer; null until reviewed, INR.
+  finalPrice    Int?
+  notes         String?
+  status        PriceRequestStatus @default(NEW)
+  sentAt        DateTime?
+  createdAt     DateTime           @default(now())
+
+  @@index([status, createdAt])
+}

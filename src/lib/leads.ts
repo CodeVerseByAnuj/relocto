@@ -20,15 +20,19 @@ export function sourcePath(request: Request): string | null {
   }
 }
 
-/** Email the lead to the team. Returns false when not configured or it fails. */
-export async function sendNotification(
-  subject: string,
-  text: string,
-  replyTo: string
-) {
+interface Email {
+  to: string;
+  subject: string;
+  text: string;
+  replyTo?: string;
+  attachments?: { filename: string; content: Buffer }[];
+}
+
+/** Send an email through Resend. Returns false when not configured or it fails. */
+export async function sendEmail({ attachments, ...email }: Email) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    console.error("RESEND_API_KEY is not configured; skipping lead email.");
+    console.error("RESEND_API_KEY is not configured; skipping email.");
     return false;
   }
 
@@ -37,18 +41,26 @@ export async function sendNotification(
       from:
         process.env.RESEND_FROM_EMAIL ??
         "Relocato Website <onboarding@resend.dev>",
-      to: process.env.QUOTE_NOTIFY_EMAIL ?? SITE_CONFIG.email,
-      replyTo,
-      subject,
-      text,
+      attachments,
+      ...email,
     });
     if (error) {
-      console.error("Failed to send lead email:", error);
+      console.error("Failed to send email:", error);
       return false;
     }
     return true;
   } catch (error) {
-    console.error("Failed to send lead email:", error);
+    console.error("Failed to send email:", error);
     return false;
   }
+}
+
+/** Email the lead to the team. */
+export function sendNotification(subject: string, text: string, replyTo: string) {
+  return sendEmail({
+    to: process.env.QUOTE_NOTIFY_EMAIL ?? SITE_CONFIG.email,
+    subject,
+    text,
+    replyTo,
+  });
 }

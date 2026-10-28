@@ -1,15 +1,29 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { DistanceChecker } from "@/components/sections/quote/DistanceChecker";
+import { QuoteCalculator } from "@/components/sections/quote/QuoteCalculator";
+import { getPricing } from "@/lib/queries/pricing";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Check Moving Prices | Relocato Packers and Movers",
   description:
-    "Enter your pickup and drop locations to get a moving price estimate.",
+    "Enter your pickup and drop locations, add your items and get a moving price estimate.",
 };
 
-export default function GetQuotePage() {
+export default async function GetQuotePage() {
+  const { categories } = await getPricing();
+
+  // Only what the form needs: prices are calculated on the server.
+  const calculatorCategories = categories
+    .filter((category) => category.items.length > 0)
+    .map((category) => ({
+      id: category.id,
+      name: category.name,
+      items: category.items.map((item) => ({ id: item.id, name: item.name })),
+    }));
+
   return (
     <>
       <Header />
@@ -20,10 +34,10 @@ export default function GetQuotePage() {
               Check Your Moving Price
             </h1>
             <p className="mt-3 text-muted-foreground">
-              Enter your pickup and drop locations to get started.
+              Choose your locations, add your items and get an instant estimate.
             </p>
           </div>
-          <DistanceChecker />
+          <QuoteCalculator categories={calculatorCategories} />
         </div>
       </main>
       <Footer />

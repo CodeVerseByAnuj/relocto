@@ -6,6 +6,8 @@ import {
   LogOut,
   MapPin,
   Newspaper,
+  Receipt,
+  Tag,
   UserCog,
 } from "lucide-react";
 import { logoutAction } from "@/app/admin/actions";
@@ -17,9 +19,10 @@ interface AdminShellProps {
 }
 
 export async function AdminShell({ admin, children }: AdminShellProps) {
-  const newInquiries = await prisma.inquiry
-    .count({ where: { status: "NEW" } })
-    .catch(() => 0);
+  const [newInquiries, newPriceRequests] = await Promise.all([
+    prisma.inquiry.count({ where: { status: "NEW" } }).catch(() => 0),
+    prisma.priceRequest.count({ where: { status: "NEW" } }).catch(() => 0),
+  ]);
 
   return (
     <div className="flex min-h-screen bg-slate-50 text-slate-900">
@@ -41,6 +44,17 @@ export async function AdminShell({ admin, children }: AdminShellProps) {
             ) : null}
           </Link>
           <Link
+            href="/admin/price-requests"
+            className="flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-slate-700 hover:bg-slate-100"
+          >
+            <Receipt className="size-4" /> Price requests
+            {newPriceRequests > 0 ? (
+              <span className="ml-auto rounded-full bg-amber-500 px-2 py-0.5 text-xs font-bold text-white">
+                {newPriceRequests}
+              </span>
+            ) : null}
+          </Link>
+          <Link
             href="/admin"
             className="flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-slate-700 hover:bg-slate-100"
           >
@@ -51,6 +65,12 @@ export async function AdminShell({ admin, children }: AdminShellProps) {
             className="flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-slate-700 hover:bg-slate-100"
           >
             <LayoutGrid className="size-4" /> Services
+          </Link>
+          <Link
+            href="/admin/pricing"
+            className="flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-slate-700 hover:bg-slate-100"
+          >
+            <Tag className="size-4" /> Pricing
           </Link>
           <Link
             href="/admin/blog"

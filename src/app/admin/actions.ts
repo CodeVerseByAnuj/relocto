@@ -33,6 +33,11 @@ import {
 } from "@/lib/queries/serviceCategoryMutations";
 import { blogPostSchema, createBlogPostSchema } from "@/lib/schemas/blogPost";
 import { aboutPageSchema, createAboutPageSchema } from "@/lib/schemas/aboutPage";
+import { SITE_CONFIG } from "@/constants/site";
+import { buildEstimatePdf } from "@/lib/estimatePdf";
+import { sendEmail } from "@/lib/leads";
+import { pricingSchema } from "@/lib/schemas/pricing";
+import { savePricing } from "@/lib/queries/pricing";
 import { slugify } from "@/lib/utils";
 
 export type ActionResult = { ok: true } | { ok: false; error: string };
@@ -471,4 +476,133 @@ export async function changePasswordAction(
     data: { passwordHash: await hashPassword(parsed.data.next) },
   });
   return { ok: true };
+}
+
+export async function savePricingAction(payload: unknown): Promise<ActionResult> {
+  await requireAdmin();
+
+  const parsed = pricingSchema.safeParse(payload);
+  if (!parsed.success) {
+    const issue = parsed.error.issues[0];
+    return {
+      ok: false,
+      error: issue
+        ? `${issue.path.join(".") || "form"}: ${issue.message}`
+        : "Validation failed",
+    };
+  }
+
+  await savePricing(parsed.data);
+  revalidatePath("/admin/pricing");
+  return { ok: true };
+}
+
+const rupees = z.coerce
+  .number({ message: "Enter a valid amount" })
+  .int("Use whole rupees")
+  .min(0, "Amount cannot be negative")
+  .max(100_000_000, "Amount is too large");
+
+const priceRequestSchema = z.object({
+  items: z
+    .array(
+      z.object({
+        category: z.string().trim().max(100).default(""),
+        name: z.string().trim().min(1, "Item name is required").max(200),
+        quantity: z.coerce
+          .number({ message: "Enter a valid quantity" })
+          .int("Quantity must be a whole number")
+          .min(1, "Quantity must be at least 1")
+          .max(1000, "Quantity is too large"),
+        unitPrice: rupees,
+      })
+    )
+    .min(1, "Add at least one item"),
+  distanceCharge: rupees,
+  finalPrice: rupees,
+  notes: z
+    .string()
+    .trim()
+    .max(2000, "Notes are too long")
+    .nullish()
+    .transform((v) => (v ? v : null)),
+});
+
+export async function savePriceRequestAction(
+  id: string,
+  payload: unknown
+): Promise<ActionResult> {
+  await requireAdmin();
+
+  const parsed = priceRequestSchema.safeParse(payload);
+  if (!parsed.success) {
+    return { ok: false, error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  }
+
+  // The items total is always recomputed here, never trusted from the browser.
+  const itemsTotal = parsed.data.items.reduce(
+    (sum, item) => sum + item.unitPrice * item.quantity,
+    0
+  );
+
+  await prisma.priceRequest.update({
+    where: { id },
+    data: { ...parsed.data, itemsTotal },
+  });
+  revalidatePath("/admin/price-requests");
+  revalidatePath(`/admin/price-requests/${id}`);
+  return { ok: true };
+}
+
+/** Record that the estimate went to the customer (WhatsApp or email). */
+export async function markPriceRequestSentAction(id: string): Promise<void> {
+  await requireAdmin();
+  await prisma.priceRequest.updateMany({
+    where: { id, status: "NEW" },
+    data: { status: "SENT", sentAt: new Date() },
+  });
+  revalidatePath("/admin/price-requests");
+  revalidatePath(`/admin/price-requests/${id}`);
+}
+
+export async function emailEstimateAction(id: string): Promise<ActionResult> {
+  await requireAdmin();
+
+  const priceRequest = await prisma.priceRequest.findUnique({ where: { id } });
+  if (!priceRequest) return { ok: false, error: "Price request not found." };
+
+  const pdf = await buildEstimatePdf(priceRequest);
+  const sent = await sendEmail({
+    to: priceRequest.email,
+    subject: `Your moving estimate from ${SITE_CONFIG.fullName}`,
+    text: [
+      `Hello ${priceRequest.name},`,
+      "",
+      `Thank you for contacting ${SITE_CONFIG.fullName}. Your moving estimate is attached as a PDF.`,
+      "",
+      `For any questions, call us on ${SITE_CONFIG.phone}.`,
+    ].join("\n"),
+    replyTo: process.env.QUOTE_NOTIFY_EMAIL ?? SITE_CONFIG.email,
+    attachments: [{ filename: "moving-estimate.pdf", content: Buffer.from(pdf) }],
+  });
+  if (!sent) {
+    return { ok: false, error: "Could not send the email. Check the Resend settings." };
+  }
+
+  await markPriceRequestSentAction(id);
+  return { ok: true };
+}
+
+export async function deletePriceRequestAction(id: string): Promise<void> {
+  await requireAdmin();
+  await prisma.priceRequest.delete({ where: { id } });
+  revalidatePath("/admin/price-requests");
+  redirect("/admin/price-requests");
+}
+
+export async function closePriceRequestAction(id: string): Promise<void> {
+  await requireAdmin();
+  await prisma.priceRequest.update({ where: { id }, data: { status: "CLOSED" } });
+  revalidatePath("/admin/price-requests");
+  revalidatePath(`/admin/price-requests/${id}`);
 }
