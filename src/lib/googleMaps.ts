@@ -11,11 +11,10 @@ export interface PlaceSuggestion {
   description: string;
 }
 
-/** Used when GOOGLE_MAPS_API_KEY is not set in the environment. */
-const DEFAULT_API_KEY = "AIzaSyDFj1yico4eWu-HW4urHyrzh3TQG3LJ-T4";
-
 function apiKey() {
-  return process.env.GOOGLE_MAPS_API_KEY || DEFAULT_API_KEY;
+  const key = process.env.GOOGLE_MAPS_API_KEY;
+  if (!key) throw new Error("GOOGLE_MAPS_API_KEY is not configured.");
+  return key;
 }
 
 /** Address suggestions in India for what the user has typed so far. */
