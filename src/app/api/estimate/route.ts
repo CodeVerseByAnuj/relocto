@@ -10,6 +10,7 @@ import { prisma } from "@/lib/prisma";
 import { getPricing } from "@/lib/queries/pricing";
 
 const MAX_QUANTITY = 50;
+const MAX_EXTRA_ITEMS = 20;
 
 interface EstimateRequestBody {
   fromPlaceId?: string;
@@ -18,6 +19,8 @@ interface EstimateRequestBody {
   toLabel?: string;
   /** Item id -> quantity. */
   items?: Record<string, unknown>;
+  /** Items typed by the customer that are not in the price list. */
+  extraItems?: { name?: unknown; quantity?: unknown }[];
   name?: string;
   email?: string;
   phone?: string;
@@ -65,7 +68,19 @@ export async function POST(request: Request) {
         : [];
     });
 
-  if (selected.length === 0) {
+  // Customer-typed items have no rate card price; the admin prices them later.
+  const extras = Array.isArray(body.extraItems)
+    ? body.extraItems.slice(0, MAX_EXTRA_ITEMS).flatMap((entry) => {
+        const name = clean(entry?.name, 100);
+        const quantity = Math.min(Math.floor(Number(entry?.quantity)), MAX_QUANTITY);
+        return name && quantity > 0
+          ? [{ category: "Other items", name, quantity, unitPrice: 0 }]
+          : [];
+      })
+    : [];
+  const requested = [...selected, ...extras];
+
+  if (requested.length === 0) {
     return NextResponse.json(
       { error: "Please add at least one item." },
       { status: 400 }
@@ -106,7 +121,7 @@ export async function POST(request: Request) {
         fromLabel,
         toLabel,
         km,
-        items: selected,
+        items: requested,
         itemsTotal,
         distanceCharge,
         estimate,
@@ -126,7 +141,7 @@ export async function POST(request: Request) {
       `From: ${fromLabel}`,
       `To: ${toLabel}`,
       `Distance: ${km} km`,
-      `Items: ${selected.map((i) => `${i.name} x ${i.quantity}`).join(", ")}`,
+      `Items: ${requested.map((i) => `${i.name} x ${i.quantity}`).join(", ")}`,
       `Estimate: ${formatInr(estimate)}`,
       "",
       "Review and send it from the admin panel: /admin/price-requests",

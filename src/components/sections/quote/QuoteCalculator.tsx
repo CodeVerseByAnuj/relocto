@@ -30,6 +30,7 @@ export interface CalculatorCategory {
 const STEPS = ["Locations", "Your Details", "Items"] as const;
 const LAST_STEP = STEPS.length - 1;
 const MAX_QUANTITY = 50;
+const MAX_EXTRA_ITEMS = 20;
 
 const STEP_INTRO = [
   {
@@ -69,7 +70,42 @@ export function QuoteCalculator({
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
-  const addedCount = Object.values(items).reduce((sum, qty) => sum + qty, 0);
+  const [extraItems, setExtraItems] = useState<{ name: string; quantity: number }[]>([]);
+  const [extraName, setExtraName] = useState("");
+
+  const addedCount =
+    Object.values(items).reduce((sum, qty) => sum + qty, 0) +
+    extraItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  function addExtraItem() {
+    const trimmed = extraName.trim().slice(0, 100);
+    if (!trimmed || extraItems.length >= MAX_EXTRA_ITEMS) return;
+    setExtraItems((current) => {
+      const existing = current.find(
+        (item) => item.name.toLowerCase() === trimmed.toLowerCase()
+      );
+      return existing
+        ? current.map((item) =>
+            item === existing
+              ? { ...item, quantity: Math.min(item.quantity + 1, MAX_QUANTITY) }
+              : item
+          )
+        : [...current, { name: trimmed, quantity: 1 }];
+    });
+    setExtraName("");
+  }
+
+  function changeExtraItem(name: string, delta: number) {
+    setExtraItems((current) =>
+      current
+        .map((item) =>
+          item.name === name
+            ? { ...item, quantity: Math.min(item.quantity + delta, MAX_QUANTITY) }
+            : item
+        )
+        .filter((item) => item.quantity > 0)
+    );
+  }
   const visibleCategories =
     activeCategory === "all"
       ? categories
@@ -162,6 +198,7 @@ export function QuoteCalculator({
           fromLabel: from.description,
           toLabel: to.description,
           items,
+          extraItems,
           name,
           email,
           phone,
@@ -402,6 +439,81 @@ export function QuoteCalculator({
                 </ul>
               </section>
             ))}
+
+            <section>
+              <h3 className="mb-2.5 text-xs font-bold tracking-[0.15em] text-brand-navy/70 uppercase">
+                Other items
+              </h3>
+              <p className="mb-2.5 text-sm text-muted-foreground">
+                Not in the list? Add it here and our team will include it in your price.
+              </p>
+              <div className="flex gap-2">
+                <Input
+                  value={extraName}
+                  placeholder="e.g. Treadmill"
+                  maxLength={100}
+                  aria-label="Other item name"
+                  onChange={(e) => setExtraName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addExtraItem();
+                    }
+                  }}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="lg"
+                  className="h-10 rounded-full px-4"
+                  disabled={!extraName.trim() || extraItems.length >= MAX_EXTRA_ITEMS}
+                  onClick={addExtraItem}
+                >
+                  <Plus data-icon="inline-start" />
+                  Add
+                </Button>
+              </div>
+              {extraItems.length > 0 && (
+                <ul className="mt-2.5 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                  {extraItems.map((item) => (
+                    <li
+                      key={item.name}
+                      className="flex items-center justify-between gap-2 rounded-2xl border border-brand-navy bg-brand-navy/5 px-3.5 py-2.5"
+                    >
+                      <span className="text-sm font-semibold break-words text-brand-navy">
+                        {item.name}
+                      </span>
+                      <span className="flex items-center gap-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon-sm"
+                          className="rounded-full"
+                          aria-label={`Remove one ${item.name}`}
+                          onClick={() => changeExtraItem(item.name, -1)}
+                        >
+                          <Minus />
+                        </Button>
+                        <span className="w-6 text-center text-sm font-bold text-brand-navy">
+                          {item.quantity}
+                        </span>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon-sm"
+                          className="rounded-full"
+                          aria-label={`Add one ${item.name}`}
+                          disabled={item.quantity >= MAX_QUANTITY}
+                          onClick={() => changeExtraItem(item.name, 1)}
+                        >
+                          <Plus />
+                        </Button>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
 
             <p
               className={cn(
