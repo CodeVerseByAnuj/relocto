@@ -49,8 +49,8 @@ export async function QuoteSection({
 
       <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-[1fr_1.3fr] lg:gap-10 lg:px-10">
         <div>
-          <span className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1.5 text-xs font-semibold tracking-wide text-emerald-700 uppercase">
-            <span className="size-1.5 rounded-full bg-emerald-600" />
+          <span className="inline-flex items-center gap-2 rounded-full bg-slate-200 px-4 py-1.5 text-xs font-semibold tracking-wide text-slate-700 uppercase">
+            <span className="size-1.5 rounded-full bg-slate-600" />
             {badge}
           </span>
 
