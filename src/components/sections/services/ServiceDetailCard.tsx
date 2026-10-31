@@ -1,10 +1,13 @@
 import Image from "next/image";
-import { Check } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Check } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { resolveServiceIcon } from "@/lib/icons";
 
 export interface ServiceDetailCardProps {
   id?: string;
+  /** When set the whole card links to the service page. */
+  href?: string;
   icon: LucideIcon | string | null;
   imageUrl?: string | null;
   title: string;
@@ -14,6 +17,7 @@ export interface ServiceDetailCardProps {
 
 export function ServiceDetailCard({
   id,
+  href,
   icon,
   imageUrl,
   title,
@@ -25,7 +29,7 @@ export function ServiceDetailCard({
   return (
     <div
       id={id}
-      className="flex scroll-mt-24 flex-col rounded-2xl border border-border bg-white p-6 transition-shadow hover:shadow-lg hover:shadow-brand-navy-dark/5 sm:p-7"
+      className="relative flex scroll-mt-24 flex-col rounded-2xl border border-border bg-white p-6 transition-shadow hover:shadow-lg hover:shadow-brand-navy-dark/5 sm:p-7"
     >
       {imageUrl ? (
         <div className="relative mb-4 aspect-video overflow-hidden rounded-xl">
@@ -43,7 +47,15 @@ export function ServiceDetailCard({
         <Icon className="size-5.5" aria-hidden="true" />
       </div>
 
-      <h3 className="mt-4 text-lg font-bold text-brand-navy-dark">{title}</h3>
+      <h3 className="mt-4 text-lg font-bold text-brand-navy-dark">
+        {href ? (
+          <Link href={href} className="after:absolute after:inset-0 after:rounded-2xl">
+            {title}
+          </Link>
+        ) : (
+          title
+        )}
+      </h3>
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
         {description}
       </p>
@@ -64,6 +76,13 @@ export function ServiceDetailCard({
           ))}
         </ul>
       )}
+
+      {href ? (
+        <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-navy">
+          View details
+          <ArrowRight className="size-4" aria-hidden="true" />
+        </span>
+      ) : null}
     </div>
   );
 }

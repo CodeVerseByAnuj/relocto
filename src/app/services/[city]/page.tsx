@@ -15,6 +15,7 @@ import {
 import {
   getPublishedServiceCategory,
   listPublishedServiceCategories,
+  serviceHref,
   type ServiceCategoryWithServices,
 } from "@/lib/queries/serviceCategory";
 
@@ -93,6 +94,7 @@ function ServiceCategoryPage({
         title={`Our ${category.name}`}
         description={null}
         services={category.services.map((service) => ({
+          href: serviceHref(category, service),
           icon: service.icon,
           imageUrl: service.imageUrl,
           title: service.title,

@@ -8,7 +8,10 @@ import { LocationsGridSection } from "@/components/sections/locations/LocationsG
 import { WhyChooseUsSection } from "@/components/sections/features/WhyChooseUsSection";
 import { QuoteSection } from "@/components/sections/quote/QuoteSection";
 import { listLocationSearchEntries } from "@/lib/queries/location";
-import { listPublishedServiceCategories } from "@/lib/queries/serviceCategory";
+import {
+  listPublishedServiceCategories,
+  serviceHref,
+} from "@/lib/queries/serviceCategory";
 
 export const revalidate = 300;
 
@@ -42,6 +45,7 @@ export default async function ServicesPage() {
             title={category.name}
             description={category.description}
             services={category.services.map((service) => ({
+              href: serviceHref(category, service),
               icon: service.icon,
               imageUrl: service.imageUrl,
               title: service.title,
