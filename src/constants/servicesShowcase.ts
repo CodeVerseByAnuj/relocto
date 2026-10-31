@@ -10,30 +10,36 @@ export const SERVICES_SHOWCASE: ServiceShowcaseItem[] = [
     image: "/images/service1.png",
     title: "Corporate Relocation",
     description: "Employee mobility & transfer support.",
+    href: "/services/corporate-services",
   },
   {
     image: "/images/service2.png",
     title: "Household Relocation",
     description: "Premium domestic moving solutions.",
+    href: "/services/individuals-families/household-shifting",
   },
   {
     image: "/images/service3.png",
     title: "Office Relocation",
     description: "Structured commercial movement execution.",
+    href: "/services/corporate-services/office-relocation",
   },
   {
     image: "/images/service4.png",
     title: "International Relocation",
     description: "Global moving & transition assistance.",
+    href: "/services/individuals-families/international-relocation",
   },
   {
     image: "/images/service5.png",
     title: "Vehicle Transportation",
     description: "Secure car & bike relocation support.",
+    href: "/services/individuals-families/vehicle-transportation",
   },
   {
     image: "/images/service6.png",
     title: "Mobility Coordination",
     description: "Dedicated planning & move management.",
+    href: "/services/corporate-services/corporate-move-management",
   },
 ];

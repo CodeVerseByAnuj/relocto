@@ -5,8 +5,24 @@ import {
   SERVICES_SHOWCASE,
   SERVICES_SHOWCASE_SECTION,
 } from "@/constants/servicesShowcase";
+import {
+  listPublishedServiceCategories,
+  serviceHref,
+} from "@/lib/queries/serviceCategory";
+import type { ServiceShowcaseItem } from "@/types/sections";
 
-export function ServicesShowcaseSection() {
+export async function ServicesShowcaseSection() {
+  const categories = await listPublishedServiceCategories();
+  const services: ServiceShowcaseItem[] = categories.flatMap((category) =>
+    category.services.map((service) => ({
+      image: service.imageUrl,
+      icon: service.icon,
+      title: service.title,
+      description: service.description,
+      href: serviceHref(category, service),
+    }))
+  );
+
   return (
     <section
       id="services"
@@ -23,8 +39,8 @@ export function ServicesShowcaseSection() {
         </div>
 
         <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES_SHOWCASE.map((service) => (
-            <ServiceShowcaseCard key={service.title} {...service} />
+          {(services.length > 0 ? services : SERVICES_SHOWCASE).map((service) => (
+            <ServiceShowcaseCard key={service.href} {...service} />
           ))}
         </div>
 
