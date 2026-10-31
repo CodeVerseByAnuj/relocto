@@ -1,12 +1,12 @@
 import type { LucideIcon } from "lucide-react";
 
 export interface ServiceShowcaseItem {
-  /** Without an image the card shows the service icon instead. */
-  image: string | null;
-  icon?: string | null;
+  slug: string;
+  image: string;
   title: string;
   description: string;
   href: string;
+  links: { label: string; href: string }[];
 }
 
 export interface FeatureItem {

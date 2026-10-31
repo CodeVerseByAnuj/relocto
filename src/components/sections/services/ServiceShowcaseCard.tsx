@@ -1,54 +1,53 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { resolveServiceIcon } from "@/lib/icons";
 import type { ServiceShowcaseItem } from "@/types/sections";
 
 export function ServiceShowcaseCard({
   image,
-  icon,
   title,
   description,
   href,
+  links,
 }: ServiceShowcaseItem) {
-  const Icon = resolveServiceIcon(icon ?? null);
-
   return (
-    <Link
-      href={href}
-      className="group relative block aspect-[4/3] overflow-hidden rounded-2xl bg-white/10"
-    >
-      {image ? (
-        <Image
-          src={image}
-          alt={title}
-          fill
-          unoptimized={image.startsWith("/api/media/")}
-          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-      ) : (
-        <div className="absolute inset-0 flex items-start justify-center pt-[18%]">
-          <Icon
-            className="size-16 text-white/60 transition-transform duration-500 group-hover:scale-105"
-            aria-hidden="true"
-          />
-        </div>
-      )}
-      <div className="absolute inset-0 bg-gradient-to-t from-brand-navy-dark/90 via-brand-navy-dark/20 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 p-5">
-        <h3 className="text-base font-bold text-white">{title}</h3>
-        <p className="mt-1 line-clamp-2 text-sm leading-snug text-white/80">
+    <article className="group relative flex min-h-[30rem] flex-col justify-end overflow-hidden lg:min-h-[38rem]">
+      <Image
+        src={image}
+        alt={title}
+        fill
+        unoptimized={image.startsWith("/api/media/")}
+        sizes="(min-width: 1024px) 50vw, 100vw"
+        className="object-cover transition-transform duration-500 group-hover:scale-105"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-brand-navy-dark/95 via-brand-navy-dark/50 to-brand-navy-dark/10" />
+      <div className="relative p-6 sm:p-10 lg:p-12">
+        <h3 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+          {title}
+        </h3>
+        <p className="mt-3 max-w-md text-sm leading-relaxed text-white/85 sm:text-base">
           {description}
         </p>
-        <span className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-accent">
-          View details
-          <ArrowRight
-            className="size-4 transition-transform group-hover:translate-x-0.5"
-            aria-hidden="true"
-          />
-        </span>
+        <Link
+          href={href}
+          className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-brand-navy-dark transition-colors hover:bg-brand-accent"
+        >
+          Explore {title}
+          <ArrowRight className="size-4" aria-hidden="true" />
+        </Link>
+        <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
+          {links.map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className="text-xs font-semibold tracking-wider text-white/80 uppercase transition-colors hover:text-brand-accent"
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
-    </Link>
+    </article>
   );
 }

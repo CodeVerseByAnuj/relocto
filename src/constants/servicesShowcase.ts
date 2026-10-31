@@ -5,41 +5,46 @@ export const SERVICES_SHOWCASE_SECTION = {
   title: "Our Relocation & Mobility Services",
 } as const;
 
+/** The two home page panels. The slug links each one to its admin category. */
 export const SERVICES_SHOWCASE: ServiceShowcaseItem[] = [
   {
-    image: "/images/service1.png",
-    title: "Corporate Relocation",
-    description: "Employee mobility & transfer support.",
-    href: "/services/corporate-services",
-  },
-  {
+    slug: "individuals-families",
     image: "/images/service2.png",
-    title: "Household Relocation",
-    description: "Premium domestic moving solutions.",
-    href: "/services/individuals-families/household-shifting",
+    title: "Individuals & Families",
+    description:
+      "Handpicked crews, tracked trucks, and transparent pricing for every kind of move.",
+    href: "/services/individuals-families",
+    links: [
+      {
+        label: "Household Shifting",
+        href: "/services/individuals-families/household-shifting",
+      },
+      {
+        label: "International Relocation",
+        href: "/services/individuals-families/international-relocation",
+      },
+      {
+        label: "Vehicle Transportation",
+        href: "/services/individuals-families/vehicle-transportation",
+      },
+    ],
   },
   {
-    image: "/images/service3.png",
-    title: "Office Relocation",
-    description: "Structured commercial movement execution.",
-    href: "/services/corporate-services/office-relocation",
-  },
-  {
-    image: "/images/service4.png",
-    title: "International Relocation",
-    description: "Global moving & transition assistance.",
-    href: "/services/individuals-families/international-relocation",
-  },
-  {
-    image: "/images/service5.png",
-    title: "Vehicle Transportation",
-    description: "Secure car & bike relocation support.",
-    href: "/services/individuals-families/vehicle-transportation",
-  },
-  {
-    image: "/images/service6.png",
-    title: "Mobility Coordination",
-    description: "Dedicated planning & move management.",
-    href: "/services/corporate-services/corporate-move-management",
+    slug: "corporate-services",
+    image: "/images/service1.png",
+    title: "Corporate Services",
+    description:
+      "Relocation programmes for businesses — from a single workstation to an entire workforce.",
+    href: "/services/corporate-services",
+    links: [
+      {
+        label: "Office Relocation",
+        href: "/services/corporate-services/office-relocation",
+      },
+      {
+        label: "Corporate Move Management",
+        href: "/services/corporate-services/corporate-move-management",
+      },
+    ],
   },
 ];

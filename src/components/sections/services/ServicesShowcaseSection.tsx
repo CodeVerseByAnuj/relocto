@@ -13,15 +13,25 @@ import type { ServiceShowcaseItem } from "@/types/sections";
 
 export async function ServicesShowcaseSection() {
   const categories = await listPublishedServiceCategories();
-  const services: ServiceShowcaseItem[] = categories.flatMap((category) =>
-    category.services.map((service) => ({
-      image: service.imageUrl,
-      icon: service.icon,
-      title: service.title,
-      description: service.description,
-      href: serviceHref(category, service),
-    }))
-  );
+  // No categories means the database is unreachable: show the static panels.
+  const panels: ServiceShowcaseItem[] =
+    categories.length > 0
+      ? SERVICES_SHOWCASE.flatMap((panel) => {
+          const category = categories.find((item) => item.slug === panel.slug);
+          if (!category) return [];
+          return {
+            ...panel,
+            image: category.imageUrl ?? panel.image,
+            title: category.name,
+            description: category.description ?? panel.description,
+            href: `/services/${category.slug}`,
+            links: category.services.slice(0, 4).map((service) => ({
+              label: service.title,
+              href: serviceHref(category, service),
+            })),
+          };
+        })
+      : SERVICES_SHOWCASE;
 
   return (
     <section
@@ -37,13 +47,15 @@ export async function ServicesShowcaseSection() {
             {SERVICES_SHOWCASE_SECTION.title}
           </h2>
         </div>
+      </div>
 
-        <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {(services.length > 0 ? services : SERVICES_SHOWCASE).map((service) => (
-            <ServiceShowcaseCard key={service.href} {...service} />
-          ))}
-        </div>
+      <div className="mt-12 grid grid-cols-1 gap-0.5 bg-white lg:grid-cols-2">
+        {panels.map((panel) => (
+          <ServiceShowcaseCard key={panel.slug} {...panel} />
+        ))}
+      </div>
 
+      <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="mt-10 flex justify-center">
           <Link
             href="/services"

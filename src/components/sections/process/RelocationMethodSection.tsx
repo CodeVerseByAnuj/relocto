@@ -109,7 +109,7 @@ export function RelocationMethodSection() {
           ))}
         </ol>
 
-        <div className="mt-20 flex flex-col items-center justify-between gap-6 rounded-3xl bg-linear-to-r from-brand-accent to-brand-accent/70 p-8 sm:flex-row sm:p-10">
+        <div className="mt-20 flex flex-col items-center justify-between gap-6 rounded-3xl bg-gray-100 p-8 sm:flex-row sm:p-10">
           <div>
             <h3 className="text-xl font-extrabold text-brand-navy-dark sm:text-2xl">
               {PROCESS_CTA.title}
