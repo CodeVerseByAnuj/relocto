@@ -18,7 +18,9 @@ export async function QuoteSection({
   description = QUOTE_SECTION_CONTENT.description,
 }: QuoteSectionProps = {}) {
   const [{ categories }, poster] = await Promise.all([
-    getPricing(),
+    // Like the other page queries: an unreachable database (e.g. at build time)
+    // renders the page without items instead of failing it; ISR refreshes it.
+    getPricing().catch(() => ({ categories: [] })),
     getPosterImage(),
   ]);
 
