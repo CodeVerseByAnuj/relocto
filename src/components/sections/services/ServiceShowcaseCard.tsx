@@ -11,7 +11,7 @@ export function ServiceShowcaseCard({
   links,
 }: ServiceShowcaseItem) {
   return (
-    <article className="group relative flex min-h-[30rem] flex-col justify-end overflow-hidden lg:min-h-[38rem]">
+    <article className="group relative flex min-h-80 flex-col justify-end overflow-hidden lg:min-h-96">
       <Image
         src={image}
         alt={title}
@@ -21,21 +21,21 @@ export function ServiceShowcaseCard({
         className="object-cover transition-transform duration-500 group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-brand-navy-dark/95 via-brand-navy-dark/50 to-brand-navy-dark/10" />
-      <div className="relative p-6 sm:p-10 lg:p-12">
-        <h3 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+      <div className="relative p-6 lg:p-8">
+        <h3 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
           {title}
         </h3>
-        <p className="mt-3 max-w-md text-sm leading-relaxed text-white/85 sm:text-base">
+        <p className="mt-2 max-w-md text-sm leading-relaxed text-white/85">
           {description}
         </p>
         <Link
           href={href}
-          className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-brand-navy-dark transition-colors hover:bg-brand-accent"
+          className="mt-4 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-brand-navy-dark transition-colors hover:bg-brand-accent"
         >
           Explore {title}
           <ArrowRight className="size-4" aria-hidden="true" />
         </Link>
-        <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
+        <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
           {links.map((link) => (
             <li key={link.href}>
               <Link

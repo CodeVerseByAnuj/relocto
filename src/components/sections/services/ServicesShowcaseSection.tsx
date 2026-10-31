@@ -36,7 +36,7 @@ export async function ServicesShowcaseSection() {
   return (
     <section
       id="services"
-      className="scroll-mt-24 bg-linear-to-br from-brand-navy-light via-brand-navy to-brand-navy-dark py-20 sm:py-24"
+      className="scroll-mt-24 bg-linear-to-br from-brand-navy-light via-brand-navy to-brand-navy-dark py-12 sm:py-16"
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="flex flex-col items-center gap-3 text-center">
@@ -49,14 +49,14 @@ export async function ServicesShowcaseSection() {
         </div>
       </div>
 
-      <div className="mt-12 grid grid-cols-1 gap-0.5 bg-white lg:grid-cols-2">
+      <div className="mt-8 grid grid-cols-1 gap-0.5 bg-white lg:grid-cols-2">
         {panels.map((panel) => (
           <ServiceShowcaseCard key={panel.slug} {...panel} />
         ))}
       </div>
 
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <div className="mt-10 flex justify-center">
+        <div className="mt-8 flex justify-center">
           <Link
             href="/services"
             className="group inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-md transition-colors hover:bg-white/20"
