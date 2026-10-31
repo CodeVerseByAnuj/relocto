@@ -17,10 +17,10 @@ export function Logo({ className, variant = "dark" }: LogoProps) {
       )}
     >
       <Image
-        src="/images/logo.png"
+        src="/images/logo-transparent.png"
         alt={SITE_CONFIG.fullName}
-        width={941}
-        height={265}
+        width={1600}
+        height={471}
         className="h-12 w-auto sm:h-16"
         priority
       />
