@@ -27,7 +27,7 @@ export interface CalculatorCategory {
   items: { id: string; name: string }[];
 }
 
-const STEPS = ["Locations", "Items", "Your Details"] as const;
+const STEPS = ["Locations", "Your Details", "Items"] as const;
 const LAST_STEP = STEPS.length - 1;
 const MAX_QUANTITY = 50;
 
@@ -37,12 +37,12 @@ const STEP_INTRO = [
     hint: "Start typing and pick your pickup and drop locations from the list.",
   },
   {
-    title: "What are you moving?",
-    hint: "Add the items you want to move. You can change this later with our team.",
-  },
-  {
     title: "How can we reach you?",
     hint: "Our team will share your price and a PDF estimate.",
+  },
+  {
+    title: "What are you moving?",
+    hint: "Add the items you want to move. You can change this later with our team.",
   },
 ] as const;
 
@@ -64,6 +64,7 @@ export function QuoteCalculator({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [leadId, setLeadId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
@@ -73,9 +74,6 @@ export function QuoteCalculator({
     activeCategory === "all"
       ? categories
       : categories.filter((category) => category.id === activeCategory);
-  const selectedItems = categories
-    .flatMap((category) => category.items)
-    .filter((item) => (items[item.id] ?? 0) > 0);
 
   useEffect(() => {
     setKm(null);
@@ -112,10 +110,40 @@ export function QuoteCalculator({
     }));
   }
 
+  /** Saves the contact details as an admin lead; never blocks the flow. */
+  function saveLead() {
+    fetch("/api/estimate/lead", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        leadId,
+        name,
+        email,
+        phone,
+        fromLabel: from?.description,
+        toLabel: to?.description,
+      }),
+    })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => {
+        if (data?.leadId) setLeadId(data.leadId);
+      })
+      .catch(() => {});
+  }
+
+  function next() {
+    if (step === 1) saveLead();
+    setStep((s) => s + 1);
+  }
+
   function canContinue() {
     if (step === 0) return km !== null;
-    if (step === 1) return addedCount > 0;
-    return true;
+    if (step === 1) {
+      return (
+        name.trim() !== "" && phone.trim() !== "" && /^\S+@\S+\.\S+$/.test(email.trim())
+      );
+    }
+    return addedCount > 0;
   }
 
   async function submit(event: React.FormEvent) {
@@ -280,7 +308,7 @@ export function QuoteCalculator({
           </>
         )}
 
-        {step === 1 && (
+        {step === 2 && (
           <>
             {categories.length === 0 && (
               <p className="rounded-xl bg-brand-navy/5 px-4 py-6 text-center text-sm text-muted-foreground">
@@ -391,18 +419,13 @@ export function QuoteCalculator({
           </>
         )}
 
-        {step === 2 && (
+        {step === 1 && (
           <>
             <div className="rounded-2xl bg-brand-navy/5 p-4 text-sm">
               <p className="font-semibold text-brand-navy">
                 {from?.description} → {to?.description}
               </p>
-              <p className="mt-1 text-muted-foreground">
-                {km} km ·{" "}
-                {selectedItems
-                  .map((item) => `${item.name} × ${items[item.id]}`)
-                  .join(", ")}
-              </p>
+              <p className="mt-1 text-muted-foreground">{km} km</p>
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="est-name">Name*</Label>
@@ -472,13 +495,13 @@ export function QuoteCalculator({
             variant="primary"
             size="xl"
             disabled={!canContinue()}
-            onClick={() => setStep((s) => s + 1)}
+            onClick={next}
           >
             Continue
             <ArrowRight data-icon="inline-end" />
           </Button>
         ) : (
-          <Button type="submit" variant="primary" size="xl" disabled={submitting}>
+          <Button type="submit" variant="primary" size="xl" disabled={submitting || addedCount === 0}>
             {submitting ? "Sending..." : "Request Price"}
           </Button>
         )}

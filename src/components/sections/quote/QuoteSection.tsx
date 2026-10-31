@@ -1,6 +1,7 @@
 import Image from "next/image";
-import { QuoteForm } from "@/components/sections/quote/QuoteForm";
+import { QuoteCalculator } from "@/components/sections/quote/QuoteCalculator";
 import { QUOTE_SECTION_CONTENT } from "@/constants/quote";
+import { getPricing } from "@/lib/queries/pricing";
 
 const DEFAULT_HEADING = `${QUOTE_SECTION_CONTENT.heading.prefix} ${QUOTE_SECTION_CONTENT.heading.highlightOne} ${QUOTE_SECTION_CONTENT.heading.connector} ${QUOTE_SECTION_CONTENT.heading.highlightTwo} ${QUOTE_SECTION_CONTENT.heading.suffix}`;
 
@@ -10,11 +11,22 @@ interface QuoteSectionProps {
   description?: string;
 }
 
-export function QuoteSection({
+export async function QuoteSection({
   badge = QUOTE_SECTION_CONTENT.badge,
   heading = DEFAULT_HEADING,
   description = QUOTE_SECTION_CONTENT.description,
 }: QuoteSectionProps = {}) {
+  const { categories } = await getPricing();
+
+  // Only what the form needs: prices are calculated on the server.
+  const calculatorCategories = categories
+    .filter((category) => category.items.length > 0)
+    .map((category) => ({
+      id: category.id,
+      name: category.name,
+      items: category.items.map((item) => ({ id: item.id, name: item.name })),
+    }));
+
   return (
     <section
       id="contact"
@@ -30,7 +42,7 @@ export function QuoteSection({
         <div className="absolute inset-0 bg-brand-cream/80" />
       </div>
 
-      <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-[1.1fr_1fr] lg:gap-10 lg:px-10">
+      <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-[1fr_1.3fr] lg:gap-10 lg:px-10">
         <div>
           <span className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1.5 text-xs font-semibold tracking-wide text-emerald-700 uppercase">
             <span className="size-1.5 rounded-full bg-emerald-600" />
@@ -47,7 +59,7 @@ export function QuoteSection({
         </div>
 
         <div className="flex justify-center lg:justify-end">
-          <QuoteForm />
+          <QuoteCalculator categories={calculatorCategories} />
         </div>
       </div>
     </section>

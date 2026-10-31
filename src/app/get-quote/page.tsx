@@ -22,14 +22,14 @@ const HOW_IT_WORKS = [
     description: "Tell us where you are moving from and to. We work out the distance for you.",
   },
   {
-    icon: PackageCheck,
-    title: "Add your items",
-    description: "Pick the sofa, bed, fridge and other things you want to move.",
+    icon: PhoneCall,
+    title: "Share your details",
+    description: "Tell us your name, phone and email so our team can reach you.",
   },
   {
-    icon: PhoneCall,
-    title: "Get your price",
-    description: "Share your contact details and our team sends you the price with a PDF estimate.",
+    icon: PackageCheck,
+    title: "Add your items",
+    description: "Pick the sofa, bed, fridge and other things you want to move, then get your price with a PDF estimate.",
   },
 ] as const;
 
