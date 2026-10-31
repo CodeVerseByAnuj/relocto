@@ -47,6 +47,7 @@ export function ServiceCategoryEditor({
     slug: category.slug,
     name: category.name,
     description: category.description ?? "",
+    imageUrl: category.imageUrl ?? "",
     published: category.published,
     order: String(category.order),
   });
@@ -136,6 +137,12 @@ export function ServiceCategoryEditor({
           value={form.description}
           onChange={(v) => set("description", v)}
           hint="Shown at the top of the category page."
+        />
+        <ImageField
+          label="Header image (optional)"
+          value={form.imageUrl}
+          onChange={(v) => set("imageUrl", v)}
+          hint="Background of this category page header. Leave empty to use the site poster."
         />
         <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
           <input

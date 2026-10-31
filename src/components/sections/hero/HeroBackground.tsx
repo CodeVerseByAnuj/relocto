@@ -25,6 +25,7 @@ export function HeroBackground({
           alt={imageAlt}
           fill
           priority
+          unoptimized={imageSrc.startsWith("/api/media/")}
           sizes="100vw"
           className="object-cover"
         />

@@ -6,6 +6,7 @@ import { Breadcrumb } from "@/components/common/Breadcrumb";
 import { HeroBackground } from "@/components/sections/hero/HeroBackground";
 import { QuoteCalculator } from "@/components/sections/quote/QuoteCalculator";
 import { getPricing } from "@/lib/queries/pricing";
+import { getPosterImage } from "@/lib/queries/siteSettings";
 
 export const dynamic = "force-dynamic";
 
@@ -50,7 +51,7 @@ export default async function GetQuotePage() {
       <Header />
 
       <section className="relative overflow-hidden pt-36 pb-32 sm:pt-40 sm:pb-36">
-        <HeroBackground imageSrc="/images/poster.png" imageAlt="" />
+        <HeroBackground imageSrc={await getPosterImage()} imageAlt="" />
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <Breadcrumb
             items={[{ label: "Home", href: "/" }, { label: "Get Price" }]}

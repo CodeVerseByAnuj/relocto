@@ -86,6 +86,7 @@ function ServiceCategoryPage({
         eyebrow="Our Services"
         title={category.name}
         description={category.description}
+        imageSrc={category.imageUrl ?? undefined}
       />
       <ServicesDetailSection
         eyebrow={null}

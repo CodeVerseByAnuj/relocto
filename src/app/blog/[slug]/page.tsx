@@ -17,6 +17,7 @@ import {
   readingMinutes,
 } from "@/lib/queries/blogPost";
 import { formatDate } from "@/lib/utils";
+import { getPosterImage } from "@/lib/queries/siteSettings";
 
 export const revalidate = 300;
 export const dynamicParams = true;
@@ -70,7 +71,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       <Header />
 
       <section className="relative overflow-hidden pt-36 pb-14 sm:pt-40 sm:pb-16">
-        <HeroBackground imageSrc="/images/poster.png" imageAlt="" />
+        <HeroBackground imageSrc={await getPosterImage()} imageAlt="" />
         <div className="mx-auto max-w-4xl px-6 lg:px-10">
           <Breadcrumb
             items={[

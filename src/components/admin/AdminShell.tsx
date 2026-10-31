@@ -8,6 +8,7 @@ import {
   Newspaper,
   Receipt,
   Tag,
+  ImageIcon,
   UserCog,
 } from "lucide-react";
 import { logoutAction } from "@/app/admin/actions";
@@ -71,6 +72,12 @@ export async function AdminShell({ admin, children }: AdminShellProps) {
             className="flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-slate-700 hover:bg-slate-100"
           >
             <Tag className="size-4" /> Pricing
+          </Link>
+          <Link
+            href="/admin/poster"
+            className="flex items-center gap-2 rounded-lg px-3 py-2 font-medium text-slate-700 hover:bg-slate-100"
+          >
+            <ImageIcon className="size-4" /> Background poster
           </Link>
           <Link
             href="/admin/blog"

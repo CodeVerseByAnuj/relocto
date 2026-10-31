@@ -4,6 +4,7 @@ import { Breadcrumb } from "@/components/common/Breadcrumb";
 import { HeroBackground } from "@/components/sections/hero/HeroBackground";
 import { SERVICES_PAGE_HERO } from "@/constants/servicesDetail";
 import { SITE_CONFIG } from "@/constants/site";
+import { getPosterImage } from "@/lib/queries/siteSettings";
 import type { BreadcrumbItem } from "@/types/navigation";
 
 interface ServicesPageHeroProps {
@@ -14,16 +15,16 @@ interface ServicesPageHeroProps {
   imageSrc?: string;
 }
 
-export function ServicesPageHero({
+export async function ServicesPageHero({
   breadcrumb = [...SERVICES_PAGE_HERO.breadcrumb],
   eyebrow = SERVICES_PAGE_HERO.eyebrow,
   title = SERVICES_PAGE_HERO.title,
   description = SERVICES_PAGE_HERO.description,
-  imageSrc = "/images/poster.png",
+  imageSrc,
 }: ServicesPageHeroProps = {}) {
   return (
     <section className="relative overflow-hidden pt-36 pb-16 sm:pt-40 sm:pb-20">
-      <HeroBackground imageSrc={imageSrc} imageAlt={title} />
+      <HeroBackground imageSrc={imageSrc ?? (await getPosterImage())} imageAlt={title} />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <Breadcrumb items={breadcrumb} />

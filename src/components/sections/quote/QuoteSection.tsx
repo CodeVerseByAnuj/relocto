@@ -2,6 +2,7 @@ import Image from "next/image";
 import { QuoteCalculator } from "@/components/sections/quote/QuoteCalculator";
 import { QUOTE_SECTION_CONTENT } from "@/constants/quote";
 import { getPricing } from "@/lib/queries/pricing";
+import { getPosterImage } from "@/lib/queries/siteSettings";
 
 const DEFAULT_HEADING = `${QUOTE_SECTION_CONTENT.heading.prefix} ${QUOTE_SECTION_CONTENT.heading.highlightOne} ${QUOTE_SECTION_CONTENT.heading.connector} ${QUOTE_SECTION_CONTENT.heading.highlightTwo} ${QUOTE_SECTION_CONTENT.heading.suffix}`;
 
@@ -16,7 +17,10 @@ export async function QuoteSection({
   heading = DEFAULT_HEADING,
   description = QUOTE_SECTION_CONTENT.description,
 }: QuoteSectionProps = {}) {
-  const { categories } = await getPricing();
+  const [{ categories }, poster] = await Promise.all([
+    getPricing(),
+    getPosterImage(),
+  ]);
 
   // Only what the form needs: prices are calculated on the server.
   const calculatorCategories = categories
@@ -34,9 +38,10 @@ export async function QuoteSection({
     >
       <div className="absolute inset-0 -z-10">
         <Image
-          src="/images/poster.png"
+          src={poster}
           alt=""
           fill
+          unoptimized={poster.startsWith("/api/media/")}
           className="scale-110 object-cover opacity-25 blur-2xl"
         />
         <div className="absolute inset-0 bg-brand-cream/80" />

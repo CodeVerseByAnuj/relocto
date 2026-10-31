@@ -38,6 +38,8 @@ import { buildEstimatePdf } from "@/lib/estimatePdf";
 import { sendEmail } from "@/lib/leads";
 import { pricingSchema } from "@/lib/schemas/pricing";
 import { savePricing } from "@/lib/queries/pricing";
+import { savePosterImage } from "@/lib/queries/siteSettings";
+import { isMediaUrl } from "@/lib/media";
 import { slugify } from "@/lib/utils";
 
 export type ActionResult = { ok: true } | { ok: false; error: string };
@@ -494,6 +496,18 @@ export async function savePricingAction(payload: unknown): Promise<ActionResult>
 
   await savePricing(parsed.data);
   revalidatePath("/admin/pricing");
+  return { ok: true };
+}
+
+export async function savePosterAction(url: string): Promise<ActionResult> {
+  await requireAdmin();
+
+  if (url !== "" && !isMediaUrl(url)) {
+    return { ok: false, error: "Upload an image first." };
+  }
+
+  await savePosterImage(url);
+  revalidatePath("/admin/poster");
   return { ok: true };
 }
 

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { serviceItemSchema, slugSchema } from "@/lib/schemas/location";
+import { optionalText, serviceItemSchema, slugSchema } from "@/lib/schemas/location";
 
 const trimmed = z.string().trim();
 
@@ -9,6 +9,7 @@ export const serviceCategorySchema = z.object({
   description: trimmed
     .nullish()
     .transform((v) => (v ? v : null)),
+  imageUrl: optionalText,
   published: z.boolean().default(true),
   order: z.coerce.number().int().min(0).default(0),
   services: z.array(serviceItemSchema).default([]),

@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <HeroSection imageSrc="/images/poster.png" />
+      <HeroSection />
       <QuoteSection />
       <ServicesShowcaseSection />
       <WhyChooseUsSection />

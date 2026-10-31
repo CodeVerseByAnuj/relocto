@@ -2,12 +2,13 @@ import { Separator } from "@/components/ui/separator";
 import { HeroBackground } from "@/components/sections/hero/HeroBackground";
 import { HeroCTAGroup } from "@/components/sections/hero/HeroCTAGroup";
 import { HOME_HERO_CONTENT } from "@/constants/hero";
+import { getPosterImage } from "@/lib/queries/siteSettings";
 
 interface HeroSectionProps {
   imageSrc?: string;
 }
 
-export function HeroSection({ imageSrc }: HeroSectionProps) {
+export async function HeroSection({ imageSrc }: HeroSectionProps) {
   const { heading, subheading, description, primaryCta, secondaryCta } =
     HOME_HERO_CONTENT;
 
@@ -16,7 +17,7 @@ export function HeroSection({ imageSrc }: HeroSectionProps) {
       id="home"
       className="relative flex min-h-[85vh] items-end overflow-hidden"
     >
-      <HeroBackground imageSrc={imageSrc} imageAlt={heading} />
+      <HeroBackground imageSrc={imageSrc ?? (await getPosterImage())} imageAlt={heading} />
 
       <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-8 px-6 pb-16 pt-32 lg:grid-cols-[1.1fr_auto_1fr] lg:gap-10 lg:px-10">
         <div>

@@ -102,6 +102,8 @@ model ServiceCategory {
   slug        String  @unique
   name        String
   description String?
+  /// Background image of the category page header. Null = the site poster.
+  imageUrl    String?
   published   Boolean @default(true)
   order       Int     @default(0)
 
@@ -313,4 +315,11 @@ model PriceRequest {
   createdAt     DateTime           @default(now())
 
   @@index([status, createdAt])
+}
+
+/// Site-wide settings. A single row with id "default".
+model SiteSettings {
+  id          String @id @default("default")
+  /// Background poster used by the page heroes. Empty = the bundled default.
+  posterImage String @default("")
 }
