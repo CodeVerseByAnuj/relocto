@@ -3,6 +3,8 @@ export interface LocationSearchEntry {
   city: string;
   state: string;
   areas: string[];
+  /** Shown on the city tile; without one the tile uses the city illustration. */
+  heroImageUrl?: string | null;
 }
 
 export interface LocationSearchResult {

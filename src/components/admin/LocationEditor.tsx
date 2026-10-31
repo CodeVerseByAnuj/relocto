@@ -164,6 +164,18 @@ export function LocationEditor({ location }: { location: LocationWithContent }) 
   return (
     <div className="space-y-5 pb-24">
       <Section
+        title="Location image"
+        description="Shown on this city's page header and on its tile on /services."
+      >
+        <ImageField
+          label="Image (optional)"
+          value={form.heroImageUrl}
+          onChange={(v) => set("heroImageUrl", v)}
+          hint="JPG, PNG or WebP up to 4 MB. Blank = generated city illustration."
+        />
+      </Section>
+
+      <Section
         title="Settings"
         description="URL, publish state and SEO metadata."
       >
@@ -247,12 +259,6 @@ export function LocationEditor({ location }: { location: LocationWithContent }) 
             placeholder="Defaults to site phone"
           />
         </div>
-        <ImageField
-          label="Background image (optional)"
-          value={form.heroImageUrl}
-          onChange={(v) => set("heroImageUrl", v)}
-          hint="JPG, PNG or WebP up to 4 MB. Blank = generated city illustration."
-        />
       </Section>
 
       <Section

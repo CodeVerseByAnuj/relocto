@@ -61,11 +61,23 @@ export function listPublishedSlugs(): Promise<{ slug: string }[]> {
 
 /** City/state/areas for every published location — feeds the location search. */
 export function listLocationSearchEntries(): Promise<
-  { slug: string; city: string; state: string; areas: string[] }[]
+  {
+    slug: string;
+    city: string;
+    state: string;
+    areas: string[];
+    heroImageUrl: string | null;
+  }[]
 > {
   return prisma.location.findMany({
     where: { published: true },
     orderBy: [{ order: "asc" }, { city: "asc" }],
-    select: { slug: true, city: true, state: true, areas: true },
+    select: {
+      slug: true,
+      city: true,
+      state: true,
+      areas: true,
+      heroImageUrl: true,
+    },
   });
 }
